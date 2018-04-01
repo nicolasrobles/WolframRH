@@ -1,0 +1,4289 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.1' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[    174961,       4281]
+NotebookOptionsPosition[    170243,       4115]
+NotebookOutlinePosition[    170767,       4137]
+CellTagsIndexPosition[    170677,       4132]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell["EntityValue Tools Code", "Section",
+ CellChangeTimes->{{3.599417094381919*^9, 3.599417094731421*^9}, {
+  3.69357197630129*^9, 3.693571982051544*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["aliases", "Subsection",
+ CellChangeTimes->{{3.599486832685638*^9, 3.599486832863983*^9}, {
+  3.61071523306741*^9, 3.61071523410429*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "ap", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ap", "[", "x_", "]"}], ":=", 
+   RowBox[{"WolframAlpha", "[", 
+    RowBox[{"x", ",", "\"\<MathematicaParse\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"ev", "=", "EntityValue"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"ea", "[", 
+    RowBox[{"e_", ",", "p_"}], "]"}], ":=", 
+   RowBox[{"ev", "[", 
+    RowBox[{"e", ",", "p", ",", "\"\<EntityAssociation\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pa", "[", 
+    RowBox[{"e_", ",", "p_"}], "]"}], ":=", 
+   RowBox[{"ev", "[", 
+    RowBox[{"e", ",", "p", ",", "\"\<PropertyAssociation\>\""}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"pa", "[", "e_", "]"}], ":=", 
+   RowBox[{"ev", "[", 
+    RowBox[{"e", ",", "\"\<PropertyAssociation\>\""}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.599484902452174*^9, 3.5994849052820683`*^9}, {
+  3.6107152451536617`*^9, 3.610715315596381*^9}, {3.6189307409253407`*^9, 
+  3.6189307469371843`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"qv", "[", 
+    RowBox[{"t_", ",", "p_"}], "]"}], ":=", 
+   RowBox[{"AssociationMap", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"ev", "[", 
+       RowBox[{"t", ",", "#", ",", "\"\<QualifierValues\>\""}], "]"}], "&"}], 
+     ",", "p"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"qv", "[", "t_", "]"}], ":=", 
+   RowBox[{"qv", "[", 
+    RowBox[{"t", ",", 
+     RowBox[{"EntityProperties", "[", "t", "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"src", "[", 
+    RowBox[{"t_", ",", "p_"}], "]"}], ":=", 
+   RowBox[{"AssociationMap", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"ev", "[", 
+       RowBox[{"t", ",", "#", ",", "\"\<Source\>\""}], "]"}], "&"}], ",", 
+     "p"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"src", "[", "t_", "]"}], ":=", 
+   RowBox[{"src", "[", 
+    RowBox[{"t", ",", 
+     RowBox[{"EntityProperties", "[", "t", "]"}]}], "]"}]}], ";"}]}], "Input",\
+
+ CellChangeTimes->{{3.614363301602991*^9, 3.614363334148219*^9}, {
+   3.614363421620727*^9, 3.614363437417932*^9}, 3.614363794571529*^9, {
+   3.614604632737759*^9, 3.614604709117182*^9}}],
+
+Cell[BoxData[
+ RowBox[{"(*", 
+  RowBox[{
+   RowBox[{"pchart", "=", 
+    RowBox[{"ev", "[", "\"\<Properties\>\"", "]"}]}], ";", "\n", 
+   RowBox[{
+    RowBox[{"findPropertyByCommonName", "[", "pattern_", "]"}], ":=", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Quiet", "@", 
+       RowBox[{"Cases", "[", 
+        RowBox[{"pchart", ",", 
+         RowBox[{"x_EntityProperty", "/;", 
+          RowBox[{"Or", "@@", 
+           RowBox[{"StringMatchQ", "[", 
+            RowBox[{
+             RowBox[{"Cases", "[", 
+              RowBox[{
+               RowBox[{"CommonName", "[", "x", "]"}], ",", "_String", ",", 
+               RowBox[{"{", 
+                RowBox[{"0", ",", "\[Infinity]"}], "}"}]}], "]"}], ",", 
+             "pattern", ",", 
+             RowBox[{"IgnoreCase", "\[Rule]", "True"}]}], "]"}]}]}], ",", 
+         "\[Infinity]"}], "]"}]}], "\n", 
+      RowBox[{"findPropertyByCanonicalName", "[", "pattern_", "]"}]}], ":=", 
+     RowBox[{"Quiet", "@", 
+      RowBox[{"Cases", "[", 
+       RowBox[{"pchart", ",", 
+        RowBox[{"x_EntityProperty", "/;", 
+         RowBox[{"StringMatchQ", "[", 
+          RowBox[{
+           RowBox[{"CanonicalName", "[", "x", "]"}], ",", "pattern", ",", 
+           RowBox[{"IgnoreCase", "\[Rule]", "True"}]}], "]"}]}], ",", 
+        "\[Infinity]"}], "]"}]}]}]}]}], "*)"}]], "Input",
+ CellChangeTimes->{
+  3.621193764803236*^9, {3.684609620923431*^9, 3.6846096232494917`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"evaluateProperty", "[", "p_EntityProperty", "]"}], ":=", 
+  RowBox[{"DeleteMissing", "@", 
+   RowBox[{"ev", "[", 
+    RowBox[{
+     RowBox[{"ev", "[", 
+      RowBox[{
+       RowBox[{"EntityTypeName", "@", "p"}], ",", "\"\<SampleEntities\>\""}], 
+      "]"}], ",", "p", ",", "\"\<EntityAssociation\>\""}], "]"}]}]}]], "Input",\
+
+ CellChangeTimes->{{3.621190332339203*^9, 3.621190430763452*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["evt", "Subsection",
+ CellChangeTimes->{{3.599486836411314*^9, 3.599486836987256*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "evt", "]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "evt", "]"}], "=", 
+   RowBox[{"{", 
+    RowBox[{"\"\<Display\>\"", "\[Rule]", "Identity"}], "}"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evt", "[", 
+    RowBox[{"e_List", ",", "p_List", ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{"Join", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"Prepend", "[", 
+        RowBox[{"p", ",", "\"\<\>\""}], "]"}], "}"}], ",", 
+      RowBox[{"Transpose", "@", 
+       RowBox[{"Join", "[", 
+        RowBox[{
+         RowBox[{"{", "e", "}"}], ",", 
+         RowBox[{"Transpose", "@", 
+          RowBox[{"Map", "[", 
+           RowBox[{
+            RowBox[{"OptionValue", "[", "\"\<Display\>\"", "]"}], ",", 
+            RowBox[{"EntityValue", "[", 
+             RowBox[{"e", ",", "p"}], "]"}], ",", 
+            RowBox[{"{", "2", "}"}]}], "]"}]}]}], "]"}]}]}], "]"}], "]"}]}], 
+  ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evt", "[", 
+    RowBox[{"e_", ",", "p_List", ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{"Transpose", "@", 
+     RowBox[{"{", 
+      RowBox[{"p", ",", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{"OptionValue", "[", "\"\<Display\>\"", "]"}], ",", 
+         RowBox[{"EntityValue", "[", 
+          RowBox[{"e", ",", "p"}], "]"}], ",", 
+         RowBox[{"{", "1", "}"}]}], "]"}]}], "}"}]}], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evt", "[", 
+    RowBox[{"e_List", ",", "p_", ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{"Transpose", "@", 
+     RowBox[{"{", 
+      RowBox[{"e", ",", 
+       RowBox[{"Map", "[", 
+        RowBox[{
+         RowBox[{"OptionValue", "[", "\"\<Display\>\"", "]"}], ",", 
+         RowBox[{"EntityValue", "[", 
+          RowBox[{"e", ",", "p"}], "]"}], ",", 
+         RowBox[{"{", "1", "}"}]}], "]"}]}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evt", "[", 
+    RowBox[{"e_Entity", ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"evt", "[", 
+    RowBox[{"e", ",", 
+     RowBox[{"EntityProperties", "[", "e", "]"}], ",", "opts"}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.601999021092022*^9, 3.6019990265664043`*^9}, {
+  3.604773460393116*^9, 3.604773461152769*^9}, {3.605961672069837*^9, 
+  3.605961703400219*^9}, {3.606050936353558*^9, 3.606050989893482*^9}, {
+  3.6107152421761427`*^9, 3.61071524317621*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["evs", "Subsection",
+ CellChangeTimes->{{3.638293048032823*^9, 3.638293048752335*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", 
+   RowBox[{"evs", ",", "evsh"}], "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evs", "[", "e_", "]"}], ":=", 
+   RowBox[{"evgrid", "@", 
+    RowBox[{"ev", "[", 
+     RowBox[{"e", ",", "\"\<NonMissingPropertyAssociation\>\""}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evs", "[", "p_EntityProperty", "]"}], ":=", 
+   RowBox[{"evgrid", "@", 
+    RowBox[{"ev", "[", 
+     RowBox[{
+      RowBox[{"EntityTypeName", "@", "p"}], ",", "p", ",", 
+      "\"\<NonMissingEntityAssociation\>\""}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evs", "[", 
+    RowBox[{"e_", ",", "ps_List"}], "]"}], ":=", 
+   RowBox[{"evgrid", "@", 
+    RowBox[{"ev", "[", 
+     RowBox[{"e", ",", "ps", ",", "\"\<NonMissingPropertyAssociation\>\""}], 
+     "]"}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6382930427155533`*^9, 3.638293122549942*^9}, {
+  3.638293163421576*^9, 3.638293163795895*^9}, {3.647370562676111*^9, 
+  3.6473705684745913`*^9}, {3.650903080639248*^9, 3.650903118524571*^9}, {
+  3.650903219899081*^9, 3.650903223736739*^9}, {3.650903980624855*^9, 
+  3.650903982791172*^9}, {3.6586736015384407`*^9, 3.658673602864708*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{
+   RowBox[{"evsh", "[", 
+    RowBox[{"ent_", ",", 
+     RowBox[{"n_:", "5"}]}], "]"}], ":=", 
+   RowBox[{"evgrid", "@", 
+    RowBox[{"Replace", "[", 
+     RowBox[{
+      RowBox[{"ev", "[", 
+       RowBox[{"ent", ",", "\"\<PropertyAssociation\>\""}], "]"}], ",", 
+      RowBox[{"x_List", "\[RuleDelayed]", 
+       RowBox[{"Take", "[", 
+        RowBox[{"x", ",", 
+         RowBox[{"UpTo", "[", "n", "]"}]}], "]"}]}], ",", "1"}], "]"}]}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.6582375097664948`*^9, 3.658237628541758*^9}, {
+  3.6586735805785313`*^9, 3.658673590360813*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["evg", "Subsection",
+ CellChangeTimes->{{3.665235800746673*^9, 3.665235801824521*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"$evgreplacements", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"g", ":", 
+      RowBox[{"(", 
+       RowBox[{
+        RowBox[{"Polygon", "[", 
+         RowBox[{"GeoPosition", "[", "___", "]"}], "]"}], "|", 
+        RowBox[{"GeoGroup", "[", "___", "]"}]}], ")"}]}], "\[RuleDelayed]", 
+     RowBox[{"GeoGraphics", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+         RowBox[{"GeoStyling", "[", "\"\<OutlineMap\>\"", "]"}], ",", "g"}], 
+        "}"}], ",", 
+       RowBox[{"GeoBackground", "\[Rule]", "None"}]}], "]"}]}], "}"}]}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.665235954990704*^9, 3.6652359752992907`*^9}, {
+  3.66523611057661*^9, 3.66523611199065*^9}, {3.665236510133719*^9, 
+  3.66523651753078*^9}, {3.665236620618972*^9, 3.6652366249053288`*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"evg", "[", "e_", "]"}], ":=", 
+   RowBox[{"evgrid", "@", 
+    RowBox[{"Replace", "[", 
+     RowBox[{
+      RowBox[{"ev", "[", 
+       RowBox[{"e", ",", "\"\<NonMissingPropertyAssociation\>\""}], "]"}], 
+      ",", "$evgreplacements", ",", "1"}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evg", "[", "p_EntityProperty", "]"}], ":=", 
+   RowBox[{"evgrid", "@", 
+    RowBox[{"Replace", "[", 
+     RowBox[{
+      RowBox[{"ev", "[", 
+       RowBox[{
+        RowBox[{"EntityTypeName", "@", "p"}], ",", "p", ",", 
+        "\"\<NonMissingEntityAssociation\>\""}], "]"}], ",", 
+      "$evgreplacements", ",", "1"}], "]"}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.665235558628428*^9, 3.665235645339148*^9}, {
+   3.6652357771715107`*^9, 3.665235789593766*^9}, {3.665235982092629*^9, 
+   3.665236028503356*^9}, 3.665236061852564*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["xdt", "Subsection",
+ CellChangeTimes->{{3.60123580435957*^9, 3.601235804838009*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"xdt", "[", 
+    RowBox[{"dp_", ",", "e_List", ",", "p_List"}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"es", "=", 
+        RowBox[{"Replace", "[", 
+         RowBox[{"e", ",", 
+          RowBox[{"x_Entity", "\[RuleDelayed]", 
+           RowBox[{"CanonicalName", "[", "x", "]"}]}], ",", "1"}], "]"}]}], 
+       ",", 
+       RowBox[{"ps", "=", 
+        RowBox[{"Replace", "[", 
+         RowBox[{"p", ",", 
+          RowBox[{"x_EntityProperty", "\[RuleDelayed]", 
+           RowBox[{"CanonicalName", "[", "x", "]"}]}], ",", "1"}], "]"}]}]}], 
+      "}"}], ",", 
+     RowBox[{"evgrid", "[", 
+      RowBox[{
+       RowBox[{"Outer", "[", 
+        RowBox[{"dp", ",", "es", ",", "ps", ",", "1"}], "]"}], ",", "es", ",",
+        "ps"}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"xdt", "[", 
+    RowBox[{"dp_", ",", "e_", ",", "p_List"}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"es", "=", 
+        RowBox[{"Replace", "[", 
+         RowBox[{"e", ",", 
+          RowBox[{"x_Entity", "\[RuleDelayed]", 
+           RowBox[{"CanonicalName", "[", "x", "]"}]}]}], "]"}]}], ",", 
+       RowBox[{"ps", "=", 
+        RowBox[{"Replace", "[", 
+         RowBox[{"p", ",", 
+          RowBox[{"x_EntityProperty", "\[RuleDelayed]", 
+           RowBox[{"CanonicalName", "[", "x", "]"}]}], ",", "1"}], "]"}]}]}], 
+      "}"}], ",", 
+     RowBox[{"evgrid", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"#", ",", 
+          RowBox[{"dp", "[", 
+           RowBox[{"es", ",", "#"}], "]"}]}], "}"}], "&"}], "/@", "ps"}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"xdt", "[", 
+    RowBox[{"dp_", ",", "e_", ",", "p_"}], "]"}], ":=", 
+   RowBox[{"xdt", "[", 
+    RowBox[{"dp", ",", "e", ",", 
+     RowBox[{"{", "p", "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"xdt", "[", 
+    RowBox[{"dp_", ",", "e_"}], "]"}], ":=", 
+   RowBox[{"xdt", "[", 
+    RowBox[{"dp", ",", "e", ",", 
+     RowBox[{"dp", "[", "\"\<Properties\>\"", "]"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.601235284747271*^9, 3.601235478520947*^9}, {
+  3.601235567434205*^9, 3.6012355962064133`*^9}, {3.601235728051499*^9, 
+  3.601235760884613*^9}, {3.601402765823978*^9, 3.601402813098132*^9}, {
+  3.601402845866374*^9, 3.601402912958713*^9}, {3.6014029521361017`*^9, 
+  3.601402993701104*^9}, {3.6014030532049417`*^9, 3.6014030916293793`*^9}, {
+  3.60140312621939*^9, 3.601403143368825*^9}, {3.601912171849869*^9, 
+  3.601912187389635*^9}, {3.601990601133336*^9, 3.601990617761016*^9}, {
+  3.6029520346869907`*^9, 3.602952096852289*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["evqt", "Subsection",
+ CellChangeTimes->{{3.5994868400512333`*^9, 3.599486841443033*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"$eqvtDates", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"{", "2010", "}"}], ",", 
+     RowBox[{"DateObject", "[", 
+      RowBox[{"{", "2010", "}"}], "]"}], ",", 
+     RowBox[{"DateObject", "[", 
+      RowBox[{"{", 
+       RowBox[{"2010", ",", " ", "12", ",", " ", "17"}], "}"}], "]"}], ",", 
+     "All"}], 
+    RowBox[{"(*", 
+     RowBox[{
+      InterpretationBox[
+       RowBox[{"DateObject", "[", 
+        PanelBox[
+         StyleBox[
+          RowBox[{"\<\"Mon 1 Feb 2010 06:30\"\>", 
+           StyleBox["\<\"GMT\"\>",
+            FontColor->GrayLevel[0.5]]}],
+          ShowStringCharacters->False]], "]"}],
+       DateObject[{2010, 2, 1}, 
+        TimeObject[{6, 30}], TimeZone -> 0.],
+       Editable->False,
+       SelectWithContents->True], ",", 
+      InterpretationBox[
+       RowBox[{"DateObject", "[", 
+        PanelBox[
+         StyleBox[
+          RowBox[{"\<\"Mon 1 Feb 2010 06:30\"\>", 
+           StyleBox["\<\"GMT\"\>",
+            FontColor->GrayLevel[0.5]]}],
+          ShowStringCharacters->False]], "]"}],
+       DateObject[{2010, 2, 1}, 
+        TimeObject[{6, 30}], TimeZone -> 0.],
+       Editable->False,
+       SelectWithContents->True], ",", 
+      RowBox[{"DateList", "@", 
+       InterpretationBox[
+        RowBox[{"DateObject", "[", 
+         PanelBox[
+          StyleBox[
+           RowBox[{"\<\"Mon 1 Feb 2010 06:30\"\>", 
+            StyleBox["\<\"GMT\"\>",
+             FontColor->GrayLevel[0.5]]}],
+           ShowStringCharacters->False]], "]"}],
+        DateObject[{2010, 2, 1}, 
+         TimeObject[{6, 30}], TimeZone -> 0.],
+        Editable->False,
+        SelectWithContents->True]}]}], "*)"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"$eqvtLocations", "=", 
+   RowBox[{"{", 
+    RowBox[{"(*", 
+     RowBox[{
+      TemplateBox[{"\"London\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"City\"", ",", 
+            RowBox[{"{", 
+              
+              RowBox[{"\"London\"", ",", "\"GreaterLondon\"", ",", 
+                "\"UnitedKingdom\""}], "}"}]}], "]"}],
+        "\"Entity[\\\"City\\\", {\\\"London\\\", \\\"GreaterLondon\\\", \
+\\\"UnitedKingdom\\\"}]\"","\"city\""},
+       "Entity"], ",", 
+      TemplateBox[{"\"Mount Everest\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"Mountain\"", ",", "\"MountEverest\""}], "]"}],
+        "\"Entity[\\\"Mountain\\\", \\\"MountEverest\\\"]\"","\"mountain\""},
+       "Entity"]}], "*)"}], 
+    RowBox[{
+     TemplateBox[{"\"Tokyo\"",RowBox[{"Entity", "[", 
+         RowBox[{"\"City\"", ",", 
+           RowBox[{"{", 
+             RowBox[{"\"Tokyo\"", ",", "\"Tokyo\"", ",", "\"Japan\""}], 
+             "}"}]}], "]"}],
+       "\"Entity[\\\"City\\\", {\\\"Tokyo\\\", \\\"Tokyo\\\", \\\"Japan\\\"}]\
+\"","\"city\""},
+      "Entity"], ",", 
+     RowBox[{"GeoPosition", "[", 
+      RowBox[{"{", 
+       RowBox[{"35.67`", ",", "139.77`"}], "}"}], "]"}], ",", 
+     RowBox[{"GeoPosition", "[", 
+      RowBox[{"{", 
+       RowBox[{"40.11`", ",", 
+        RowBox[{"-", "88.24`"}]}], "}"}], "]"}]}], 
+    RowBox[{"(*", 
+     RowBox[{",", 
+      RowBox[{"{", 
+       RowBox[{"40.11`", ",", 
+        RowBox[{"-", "88.24`"}]}], "}"}], ",", 
+      RowBox[{"GeoPosition", "[", 
+       RowBox[{"{", 
+        RowBox[{"35.67`", ",", "139.77`"}], "}"}], "]"}]}], "*)"}], "}"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.602938834246358*^9, 3.602938953028376*^9}, {
+  3.6090081928481417`*^9, 3.609008198872957*^9}, {3.609008241582896*^9, 
+  3.609008255548902*^9}, {3.614604795791573*^9, 3.614604796761342*^9}, {
+  3.614624187649673*^9, 3.614624199299644*^9}, {3.621365976014872*^9, 
+  3.621365980368389*^9}, {3.621366012011633*^9, 3.621366012185567*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", 
+   RowBox[{"evgrid", ",", "addq", ",", "gqv", ",", "evqt"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evgrid", "[", "dat_List", "]"}], ":=", 
+   RowBox[{"Grid", "[", 
+    RowBox[{"dat", ",", 
+     RowBox[{"Alignment", "\[Rule]", "Left"}], ",", 
+     RowBox[{"Frame", "\[Rule]", "All"}], ",", 
+     RowBox[{"FrameStyle", "\[Rule]", 
+      RowBox[{"GrayLevel", "[", "0.7", "]"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evgrid", "[", 
+    RowBox[{"dat_List", ",", "top_"}], "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{"Prepend", "[", 
+     RowBox[{"dat", ",", "top"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evgrid", "[", 
+    RowBox[{"dat_List", ",", "left_", ",", "top_", ",", 
+     RowBox[{"corner_:", "\"\<\>\""}]}], "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{"Prepend", "[", 
+     RowBox[{
+      RowBox[{"Transpose", "@", 
+       RowBox[{"Prepend", "[", 
+        RowBox[{
+         RowBox[{"Transpose", "[", "dat", "]"}], ",", "left"}], "]"}]}], ",", 
+      
+      RowBox[{"Prepend", "[", 
+       RowBox[{"top", ",", "corner"}], "]"}]}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evgrid", "[", "dat_Association", "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{"Replace", "[", 
+     RowBox[{
+      RowBox[{"Normal", "@", "dat"}], ",", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"x_", "\[Rule]", "y_"}], ")"}], "\[RuleDelayed]", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "y"}], "}"}]}], ",", "1"}], "]"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evgrid", "[", "___", "]"}], "=", "$Failed"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"trans", "[", 
+    RowBox[{"Grid", "[", 
+     RowBox[{"x_", ",", "y___"}], "]"}], "]"}], ":=", 
+   RowBox[{"Grid", "[", 
+    RowBox[{
+     RowBox[{"Transpose", "[", "x", "]"}], ",", "y"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"dim", "[", 
+     RowBox[{"Grid", "[", 
+      RowBox[{"x_", ",", "___"}], "]"}], "]"}], ":=", 
+    RowBox[{"Dimensions", "[", "x", "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"addq", "[", 
+    RowBox[{"t_", ",", 
+     RowBox[{"EntityProperty", "[", 
+      RowBox[{"_", ",", "p_", ",", 
+       RowBox[{"{", "dq_", "}"}]}], "]"}], ",", 
+     RowBox[{"{", "q___", "}"}]}], "]"}], ":=", 
+   RowBox[{"EntityProperty", "[", 
+    RowBox[{"t", ",", "p", ",", 
+     RowBox[{"DeleteCases", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"q", ",", "dq"}], "}"}], ",", 
+       RowBox[{"_", "\[Rule]", "\"\<()\>\""}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"addq", "[", 
+    RowBox[{"t_", ",", 
+     RowBox[{"EntityProperty", "[", 
+      RowBox[{"_", ",", "p_"}], "]"}], ",", 
+     RowBox[{"{", "q___", "}"}]}], "]"}], ":=", 
+   RowBox[{"EntityProperty", "[", 
+    RowBox[{"t", ",", "p", ",", 
+     RowBox[{"DeleteCases", "[", 
+      RowBox[{
+       RowBox[{"{", "q", "}"}], ",", 
+       RowBox[{"_", "\[Rule]", "\"\<()\>\""}]}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"addq", "[", 
+     RowBox[{"t_", ",", "p_", ",", 
+      RowBox[{"{", "q___", "}"}]}], "]"}], ":=", 
+    RowBox[{"EntityProperty", "[", 
+     RowBox[{"t", ",", "p", ",", 
+      RowBox[{"DeleteCases", "[", 
+       RowBox[{
+        RowBox[{"{", "q", "}"}], ",", 
+        RowBox[{"_", "\[Rule]", "\"\<()\>\""}]}], "]"}]}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{
+    RowBox[{"gqv", "[", 
+     RowBox[{"e_", ",", "p_"}], "]"}], ":=", 
+    RowBox[{
+     RowBox[{"EntityValue", "[", 
+      RowBox[{"e", ",", "p", ",", "\"\<QualifierValues\>\""}], "]"}], "/.", 
+     RowBox[{"{", "\[IndentingNewLine]", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"\"\<Date\>\"", "\[Rule]", "_"}], "]"}], "\[Rule]", 
+        RowBox[{"(", 
+         RowBox[{"\"\<Date\>\"", "\[Rule]", "$eqvtDates"}], ")"}]}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"HoldPattern", "[", 
+         RowBox[{"\"\<Location\>\"", "\[Rule]", "_"}], "]"}], "\[Rule]", 
+        RowBox[{"(", 
+         RowBox[{"\"\<Location\>\"", "\[Rule]", "$eqvtLocations"}], ")"}]}]}],
+       "\[IndentingNewLine]", "}"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evqt", "[", 
+    RowBox[{"e_", ",", "p_", ",", 
+     RowBox[{"q_", "\[Rule]", "v_List"}]}], "]"}], ":=", 
+   RowBox[{"evgrid", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"#", ",", 
+         RowBox[{"EntityValue", "[", 
+          RowBox[{"e", ",", 
+           RowBox[{"addq", "[", 
+            RowBox[{
+             RowBox[{"EntityTypeName", "@", "e"}], ",", "p", ",", 
+             RowBox[{"{", 
+              RowBox[{"q", "\[Rule]", "#"}], "}"}]}], "]"}]}], "]"}]}], "}"}],
+        "&"}], "/@", 
+      RowBox[{"Prepend", "[", 
+       RowBox[{"v", ",", "\"\<()\>\""}], "]"}]}], ",", 
+     RowBox[{"{", 
+      RowBox[{"q", ",", "p"}], "}"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evqt", "[", 
+    RowBox[{"e_", ",", "p_", ",", "q_"}], "]"}], ":=", 
+   RowBox[{"evqt", "[", 
+    RowBox[{"e", ",", "p", ",", 
+     RowBox[{"q", "\[Rule]", 
+      RowBox[{"(", 
+       RowBox[{"q", "/.", 
+        RowBox[{"gqv", "[", 
+         RowBox[{"e", ",", "p"}], "]"}]}], ")"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evqt", "[", 
+    RowBox[{"e_", ",", "p_List"}], "]"}], ":=", 
+   RowBox[{"Scan", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"evqt", "[", 
+       RowBox[{"e", ",", "#"}], "]"}], "&"}], ",", "p"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evqt", "[", 
+    RowBox[{"e_", ",", "p_"}], "]"}], ":=", 
+   RowBox[{"Scan", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Print", "@", 
+       RowBox[{"evqt", "[", 
+        RowBox[{"e", ",", "p", ",", "#"}], "]"}]}], "&"}], ",", 
+     RowBox[{"gqv", "[", 
+      RowBox[{"e", ",", "p"}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evqt", "[", 
+    RowBox[{"e_", ",", "p_", ",", 
+     RowBox[{"q1_", "\[Rule]", "v1_List"}], ",", 
+     RowBox[{"q2_", "\[Rule]", "v2_List"}]}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"vv1", "=", 
+        RowBox[{"Prepend", "[", 
+         RowBox[{"v1", ",", "\"\<()\>\""}], "]"}]}], ",", 
+       RowBox[{"vv2", "=", 
+        RowBox[{"Prepend", "[", 
+         RowBox[{"v2", ",", "\"\<()\>\""}], "]"}]}]}], "}"}], ",", 
+     RowBox[{"evgrid", "[", 
+      RowBox[{
+       RowBox[{"Outer", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"EntityValue", "[", 
+           RowBox[{"e", ",", 
+            RowBox[{"addq", "[", 
+             RowBox[{
+              RowBox[{"EntityTypeName", "@", "e"}], ",", "p", ",", 
+              RowBox[{"{", 
+               RowBox[{
+                RowBox[{"q1", "\[Rule]", "#1"}], ",", 
+                RowBox[{"q2", "\[Rule]", "#2"}]}], "}"}]}], "]"}]}], "]"}], 
+          "&"}], ",", "vv1", ",", "vv2", ",", "1"}], "]"}], ",", "vv1", ",", 
+       "vv2", ",", 
+       RowBox[{"Row", "[", 
+        RowBox[{"{", 
+         RowBox[{"q1", ",", "\"\< \[Backslash] \>\"", ",", "q2"}], "}"}], 
+        "]"}]}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evqt", "[", 
+    RowBox[{"e_", ",", "p_", ",", "q1_", ",", "q2_"}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"vv", "=", 
+       RowBox[{"gqv", "[", 
+        RowBox[{"e", ",", "p"}], "]"}]}], "}"}], ",", 
+     RowBox[{"evqt", "[", 
+      RowBox[{"e", ",", "p", ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Head", "[", "q1", "]"}], "===", "Rule"}], ",", "q1", ",", 
+         RowBox[{"q1", "\[Rule]", 
+          RowBox[{"(", 
+           RowBox[{"q1", "/.", "vv"}], ")"}]}]}], "]"}], ",", 
+       RowBox[{"If", "[", 
+        RowBox[{
+         RowBox[{
+          RowBox[{"Head", "[", "q2", "]"}], "===", "Rule"}], ",", "q2", ",", 
+         RowBox[{"q2", "\[Rule]", 
+          RowBox[{"(", 
+           RowBox[{"q2", "/.", "vv"}], ")"}]}]}], "]"}]}], "]"}]}], "]"}]}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.599343412395811*^9, 3.599343530022438*^9}, {
+   3.599343649795191*^9, 3.5993436960736*^9}, {3.599343745880867*^9, 
+   3.599343855976694*^9}, {3.59934426188936*^9, 3.599344284632114*^9}, {
+   3.599344383702359*^9, 3.599344410851564*^9}, {3.599344445323121*^9, 
+   3.599344458931191*^9}, {3.599344537294464*^9, 3.5993445396826677`*^9}, {
+   3.599344594587144*^9, 3.5993446088487577`*^9}, {3.599345195727282*^9, 
+   3.599345217319222*^9}, {3.599345458411339*^9, 3.5993455405271482`*^9}, {
+   3.5993455737281513`*^9, 3.599345632902031*^9}, {3.599345864532617*^9, 
+   3.5993459651511717`*^9}, {3.599346133590016*^9, 3.59934617681353*^9}, {
+   3.599346208157378*^9, 3.599346258975996*^9}, {3.599346306187071*^9, 
+   3.599346349136598*^9}, {3.599346503171204*^9, 3.599346522764763*^9}, {
+   3.5993465550281887`*^9, 3.5993465854505863`*^9}, {3.599346717411901*^9, 
+   3.599346742976267*^9}, {3.599346963358625*^9, 3.599346963549613*^9}, {
+   3.599347062756894*^9, 3.59934712654767*^9}, {3.599413628424819*^9, 
+   3.599413628687687*^9}, {3.599414399883835*^9, 3.599414401801812*^9}, {
+   3.599414435093112*^9, 3.599414520716138*^9}, {3.599416773512265*^9, 
+   3.5994168385322037`*^9}, {3.599420692189753*^9, 3.599420729385036*^9}, {
+   3.599420861513308*^9, 3.599420903843375*^9}, {3.5994229893293457`*^9, 
+   3.5994230648311*^9}, {3.599423099889497*^9, 3.5994231934438763`*^9}, {
+   3.599423235094326*^9, 3.599423301369398*^9}, {3.599423885090616*^9, 
+   3.5994238873051767`*^9}, {3.599424342432454*^9, 3.599424353388937*^9}, {
+   3.599424497651739*^9, 3.59942452142155*^9}, {3.6006981724997263`*^9, 
+   3.6006981795907393`*^9}, {3.601830565175321*^9, 3.601830568855171*^9}, {
+   3.601830702372046*^9, 3.6018307080574503`*^9}, {3.601830844492391*^9, 
+   3.601830849490355*^9}, {3.6018309950841637`*^9, 3.601830998613729*^9}, {
+   3.601833861660899*^9, 3.601833885421259*^9}, {3.6019094473602667`*^9, 
+   3.6019094799224567`*^9}, {3.60260125145944*^9, 3.6026012688645067`*^9}, 
+   3.60293884867482*^9, {3.602938897362953*^9, 3.602938913815765*^9}, 
+   3.602938978441039*^9, {3.602952570271628*^9, 3.6029526483539667`*^9}, {
+   3.602952922364088*^9, 3.6029529960790443`*^9}, {3.602953055786511*^9, 
+   3.602953056789394*^9}, {3.6029530924949493`*^9, 3.6029530958246183`*^9}, {
+   3.607094203758597*^9, 3.607094271666404*^9}, {3.6070943730698442`*^9, 
+   3.60709439019145*^9}, {3.650903250577386*^9, 3.65090325972921*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["evct", "Subsection",
+ CellChangeTimes->{{3.600543853387435*^9, 3.600543855931182*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", 
+   RowBox[{"evct", ",", " ", "evcfilter", ",", "uc"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"uc", "[", "x_", "]"}], ":=", 
+   RowBox[{"x", "/.", 
+    RowBox[{"q_Quantity", "\[RuleDelayed]", 
+     RowBox[{"UnitConvert", "[", "q", "]"}]}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<None\>\""}], "]"}], ":=", "dat"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Identical\>\""}], "]"}], ":=", 
+   RowBox[{"DeleteCases", "[", 
+    RowBox[{"dat", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"_", ",", "x_", ",", "y_"}], "}"}], "/;", 
+      RowBox[{"TrueQ", "[", 
+       RowBox[{"x", "===", "y"}], "]"}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Equal\>\""}], "]"}], ":=", 
+   RowBox[{"Quiet", "@", 
+    RowBox[{"DeleteCases", "[", 
+     RowBox[{"dat", ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_", ",", "x_", ",", "y_"}], "}"}], "/;", 
+       RowBox[{"TrueQ", "[", 
+        RowBox[{"x", "\[Equal]", "y"}], "]"}]}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Units\>\""}], "]"}], ":=", 
+   RowBox[{"Quiet", "@", 
+    RowBox[{"DeleteCases", "[", 
+     RowBox[{"dat", ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_", ",", "x_", ",", "y_"}], "}"}], "/;", 
+       RowBox[{"TrueQ", "[", 
+        RowBox[{
+         RowBox[{"uc", "[", "x", "]"}], "\[Equal]", 
+         RowBox[{"uc", "[", "y", "]"}]}], "]"}]}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Graphs\>\""}], "]"}], ":=", 
+   RowBox[{"Quiet", "@", 
+    RowBox[{"DeleteCases", "[", 
+     RowBox[{"dat", ",", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"_", ",", "x_Graph", ",", "y_Graph"}], "}"}], "/;", 
+       RowBox[{"TrueQ", "[", 
+        RowBox[{"IsomorphicGraphQ", "[", 
+         RowBox[{"x", ",", "y"}], "]"}], "]"}]}]}], "]"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Reordered\>\""}], "]"}], ":=", 
+   RowBox[{"DeleteCases", "[", 
+    RowBox[{"dat", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"_", ",", "x_List", ",", "y_List"}], "}"}], "/;", 
+      RowBox[{
+       RowBox[{"Sort", "[", "x", "]"}], "===", 
+       RowBox[{"Sort", "[", "y", "]"}]}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Dates\>\""}], "]"}], ":=", 
+   RowBox[{"DeleteCases", "[", 
+    RowBox[{"dat", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"_", ",", 
+        RowBox[{"x", ":", 
+         RowBox[{"(", 
+          RowBox[{"_List", "|", "_DateObject"}], ")"}]}], ",", 
+        RowBox[{"y", ":", 
+         RowBox[{"(", 
+          RowBox[{"_List", "|", "_DateObject"}], ")"}]}]}], "}"}], "/;", 
+      RowBox[{
+       RowBox[{"DateList", "[", "x", "]"}], "===", 
+       RowBox[{"DateList", "[", "y", "]"}]}]}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Missing\>\""}], "]"}], ":=", 
+   RowBox[{"DeleteCases", "[", 
+    RowBox[{"dat", ",", 
+     RowBox[{"{", 
+      RowBox[{"_", ",", "_Missing", ",", "_Missing"}], "}"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", "\"\<Functions\>\""}], "]"}], ":=", 
+   RowBox[{"DeleteCases", "[", 
+    RowBox[{"dat", ",", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"_", ",", "f_Function", ",", "g_"}], "}"}], "/;", 
+      RowBox[{"TrueQ", "[", 
+       RowBox[{
+        RowBox[{"f", "@@", 
+         RowBox[{"Union", "[", 
+          RowBox[{"Cases", "[", 
+           RowBox[{"g", ",", 
+            RowBox[{"sym_Symbol", "/;", 
+             RowBox[{
+              RowBox[{"Context", "[", "sym", "]"}], "\[Equal]", 
+              "\"\<Global`\>\""}]}], ",", "Infinity"}], "]"}], "]"}]}], 
+        "\[Equal]", "g"}], "]"}]}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{"dat_List", ",", 
+     RowBox[{"filters", ":", 
+      RowBox[{"{", "String___", "}"}]}]}], "]"}], ":=", 
+   RowBox[{"Fold", "[", 
+    RowBox[{"evcfilter", ",", "dat", ",", "filters"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evcfilter", "[", 
+    RowBox[{
+     RowBox[{"Grid", "[", 
+      RowBox[{"dat_List", ",", "z___"}], "]"}], ",", "filter_"}], "]"}], ":=", 
+   RowBox[{"Grid", "[", 
+    RowBox[{
+     RowBox[{"evcfilter", "[", 
+      RowBox[{"dat", ",", "filter"}], "]"}], ",", "z"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"Options", "[", "evct", "]"}], "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"\"\<Filters\>\"", "\[Rule]", "\"\<Identical\>\""}], ",", 
+     RowBox[{"StripWrappers", "\[Rule]", "False"}], ",", 
+     RowBox[{"\"\<AllowInvalidOutput\>\"", "\[Rule]", "False"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evct", "[", 
+    RowBox[{"dp_", ",", "e_Entity", ",", 
+     RowBox[{"ps", ":", 
+      RowBox[{"{", "__", "}"}]}], ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"p", "=", 
+        RowBox[{"Replace", "[", 
+         RowBox[{"ps", ",", 
+          RowBox[{"x_EntityProperty", "\[RuleDelayed]", 
+           RowBox[{"CanonicalName", "@", "x"}]}], ",", "1"}], "]"}]}], ",", 
+       RowBox[{"filter", "=", 
+        RowBox[{
+         RowBox[{"evcfilter", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"OptionValue", "[", "\"\<Filters\>\"", "]"}]}], "]"}], 
+         "&"}]}]}], "}"}], ",", 
+     RowBox[{"evgrid", "[", 
+      RowBox[{
+       RowBox[{"filter", "@", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{"p", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"dp", "[", 
+              RowBox[{
+               RowBox[{"CanonicalName", "@", "e"}], ",", "#"}], "]"}], "&"}], 
+            "/@", "p"}], ",", 
+           RowBox[{"EntityValue", "[", 
+            RowBox[{"e", ",", "p", ",", 
+             RowBox[{"FilterRules", "[", 
+              RowBox[{
+               RowBox[{"{", "opts", "}"}], ",", 
+               RowBox[{"StripWrappers", "|", "\"\<AllowInvalidOutput\>\""}]}],
+               "]"}]}], "]"}]}], "}"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<\>\"", ",", "dp", ",", "\"\<EntityValue\>\""}], "}"}]}], 
+      "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evct", "[", 
+    RowBox[{"dp_", ",", "e_Entity", ",", 
+     RowBox[{"{", "}"}], ",", 
+     RowBox[{"OptionsPattern", "[", "]"}]}], "]"}], ":=", "$Failed"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evct", "[", 
+    RowBox[{"dp_", ",", "e_Entity", ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"evct", "[", 
+    RowBox[{"dp", ",", "e", ",", 
+     RowBox[{"Intersection", "[", 
+      RowBox[{
+       RowBox[{"Replace", "[", 
+        RowBox[{
+         RowBox[{"dp", "[", "\"\<Properties\>\"", "]"}], ",", 
+         RowBox[{"x_EntityProperty", "\[RuleDelayed]", 
+          RowBox[{"CanonicalName", "@", "x"}]}], ",", "1"}], "]"}], ",", 
+       RowBox[{"CanonicalName", "/@", 
+        RowBox[{"EntityValue", "[", 
+         RowBox[{"e", ",", "\"\<Properties\>\""}], "]"}]}]}], "]"}], ",", 
+     "opts"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"evct", "[", 
+    RowBox[{"dp_", ",", 
+     RowBox[{"e", ":", 
+      RowBox[{"{", "__Entity", "}"}]}], ",", "ps_", ",", 
+     RowBox[{"opts", ":", 
+      RowBox[{"OptionsPattern", "[", "]"}]}]}], "]"}], ":=", 
+   RowBox[{"With", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"p", "=", 
+        RowBox[{"Replace", "[", 
+         RowBox[{"ps", ",", 
+          RowBox[{"x_EntityProperty", "\[RuleDelayed]", 
+           RowBox[{"CanonicalName", "@", "x"}]}]}], "]"}]}], ",", 
+       RowBox[{"filter", "=", 
+        RowBox[{
+         RowBox[{"evcfilter", "[", 
+          RowBox[{"#", ",", 
+           RowBox[{"OptionValue", "[", "\"\<Filters\>\"", "]"}]}], "]"}], 
+         "&"}]}]}], "}"}], ",", 
+     RowBox[{"evgrid", "[", 
+      RowBox[{
+       RowBox[{"filter", "@", 
+        RowBox[{"Transpose", "[", 
+         RowBox[{"{", 
+          RowBox[{"e", ",", 
+           RowBox[{
+            RowBox[{
+             RowBox[{"dp", "[", 
+              RowBox[{
+               RowBox[{"CanonicalName", "@", "#"}], ",", "p"}], "]"}], "&"}], 
+            "/@", "e"}], ",", 
+           RowBox[{"EntityValue", "[", 
+            RowBox[{"e", ",", "p", ",", 
+             RowBox[{"FilterRules", "[", 
+              RowBox[{
+               RowBox[{"{", "opts", "}"}], ",", 
+               RowBox[{"StripWrappers", "|", "\"\<AllowInvalidOutput\>\""}]}],
+               "]"}]}], "]"}]}], "}"}], "]"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"\"\<\>\"", ",", "dp", ",", "\"\<EntityValue\>\""}], "}"}]}], 
+      "]"}]}], "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6005439872474213`*^9, 3.600544024365088*^9}, {
+   3.600544055835753*^9, 3.600544083371332*^9}, {3.600544119412198*^9, 
+   3.600544174736844*^9}, {3.600544205336089*^9, 3.600544305780995*^9}, {
+   3.600544436507216*^9, 3.600544450159004*^9}, {3.600544487523087*^9, 
+   3.6005444995040283`*^9}, {3.600544667204878*^9, 3.6005447289694347`*^9}, {
+   3.600545132563435*^9, 3.6005452751939173`*^9}, {3.600546389776527*^9, 
+   3.600546404272056*^9}, {3.600546489280436*^9, 3.6005465984809513`*^9}, {
+   3.6005466967151737`*^9, 3.600546700070489*^9}, {3.600546746905493*^9, 
+   3.6005467791412687`*^9}, {3.600546974154223*^9, 3.60054711374868*^9}, 
+   3.6005473509637337`*^9, {3.6005473853750153`*^9, 3.6005474006054564`*^9}, {
+   3.600549000277788*^9, 3.60054900453382*^9}, {3.600716168936822*^9, 
+   3.600716172261635*^9}, 3.600716241510109*^9, {3.600716416688706*^9, 
+   3.600716447932848*^9}, 3.601407573092942*^9, {3.601905304782921*^9, 
+   3.6019053226193447`*^9}, {3.601905459083129*^9, 3.6019055063433437`*^9}, {
+   3.601905610179071*^9, 3.60190561268687*^9}, {3.601905770195343*^9, 
+   3.601905845244216*^9}, {3.601905894173431*^9, 3.6019060980371523`*^9}, {
+   3.6019061315670347`*^9, 3.601906277299883*^9}, {3.6019064397424088`*^9, 
+   3.6019064430131283`*^9}, {3.601907065942268*^9, 3.601907082670573*^9}, {
+   3.601907134482068*^9, 3.601907135321187*^9}, {3.6019072022072487`*^9, 
+   3.601907204078278*^9}, {3.601907261033271*^9, 3.601907339669993*^9}, {
+   3.601907667071527*^9, 3.601907782680869*^9}, {3.601908432466556*^9, 
+   3.601908433459807*^9}, {3.60190881416595*^9, 3.601908817176304*^9}, {
+   3.601910071094499*^9, 3.601910073390024*^9}, {3.601911114137774*^9, 
+   3.6019111443372793`*^9}, {3.601911999986631*^9, 3.6019120678149843`*^9}, {
+   3.601912205339602*^9, 3.6019122450895433`*^9}, {3.6019123677753153`*^9, 
+   3.601912369516678*^9}, {3.601920527205577*^9, 3.601920592215571*^9}, {
+   3.601920625478297*^9, 3.6019206831104107`*^9}, 3.601920760630295*^9, {
+   3.601920805672612*^9, 3.601920861767693*^9}, {3.60200414213933*^9, 
+   3.602004142544613*^9}, {3.6024318268726892`*^9, 3.602431862062686*^9}, {
+   3.602517430009018*^9, 3.602517465828479*^9}, {3.602517597273608*^9, 
+   3.602517600317943*^9}, {3.604945797588191*^9, 3.6049458037549543`*^9}, {
+   3.6058931878328238`*^9, 3.605893240467786*^9}, {3.60734556650819*^9, 
+   3.60734557753627*^9}}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["updateEP", "Subsection",
+ CellChangeTimes->{{3.6029495284000483`*^9, 3.602949530046075*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Clear", "[", "updateEP", "]"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"updateEP", "[", 
+    RowBox[{"Entity", "[", 
+     RowBox[{"t_", ",", "e_", ",", "opts___Rule"}], "]"}], "]"}], ":=", 
+   RowBox[{"If", "[", 
+    RowBox[{
+     RowBox[{"StringMatchQ", "[", 
+      RowBox[{"t", ",", 
+       RowBox[{"__", "~~", "\"\<Class\>\""}]}], "]"}], ",", 
+     RowBox[{"EntityClass", "[", 
+      RowBox[{
+       RowBox[{"StringDrop", "[", 
+        RowBox[{"t", ",", 
+         RowBox[{"-", "5"}]}], "]"}], ",", "e"}], "]"}], ",", 
+     RowBox[{"Entity", "[", 
+      RowBox[{"t", ",", "e"}], "]"}]}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"updateEP", "[", 
+    RowBox[{"EntityProperty", "[", 
+     RowBox[{"p_", ",", "opts___Rule"}], "]"}], "]"}], ":=", 
+   RowBox[{"Replace", "[", 
+    RowBox[{
+     RowBox[{"EntityProperty", "[", 
+      RowBox[{
+       RowBox[{
+        RowBox[{"SourceEntityType", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"SourceEntityType", "\[Rule]", 
+         RowBox[{"Sequence", "@@", 
+          RowBox[{"{", "}"}]}]}]}], ",", "p", ",", 
+       RowBox[{
+        RowBox[{"Qualifiers", "/.", 
+         RowBox[{"{", "opts", "}"}]}], "/.", 
+        RowBox[{"Qualifiers", "\[Rule]", 
+         RowBox[{"Sequence", "@@", 
+          RowBox[{"{", "}"}]}]}]}]}], "]"}], ",", 
+     RowBox[{
+      RowBox[{"EntityProperty", "[", "q_", "]"}], "\[RuleDelayed]", "q"}]}], 
+    "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"updateEP", "[", 
+    RowBox[{"ep", ":", 
+     RowBox[{
+      RowBox[{"(", 
+       RowBox[{"Entity", "|", "EntityClass", "|", "EntityProperty"}], ")"}], 
+      "[", "___", "]"}]}], "]"}], ":=", "ep"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"updateEP", "[", "x_", "]"}], ":=", 
+   RowBox[{"x", "/.", 
+    RowBox[{
+     RowBox[{"ep", ":", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"Entity", "|", "EntityProperty"}], ")"}], "[", "___", "]"}]}],
+      "\[RuleDelayed]", 
+     RowBox[{"updateEP", "[", "ep", "]"}]}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.602947936038149*^9, 3.602947972955495*^9}, {
+   3.602948371353465*^9, 3.602948421323082*^9}, {3.602948462167946*^9, 
+   3.60294846290477*^9}, 3.602948517502253*^9, {3.6029485684775257`*^9, 
+   3.6029486107532663`*^9}, {3.602948667323175*^9, 3.602948769675049*^9}, {
+   3.602948979940714*^9, 3.602948980323286*^9}, {3.602949152308758*^9, 
+   3.602949309083642*^9}, {3.602949354011348*^9, 3.6029494338364964`*^9}, {
+   3.602949605809991*^9, 3.6029496791876802`*^9}, {3.6029497915230837`*^9, 
+   3.602949854764567*^9}, {3.60294990711062*^9, 3.602949913990158*^9}, {
+   3.602949958422521*^9, 3.6029499587076263`*^9}, {3.602949990052167*^9, 
+   3.602949998418047*^9}, {3.602950046396412*^9, 3.6029500496735287`*^9}, {
+   3.602950083195282*^9, 3.602950083676265*^9}, 3.602963883705051*^9, {
+   3.6030288493403587`*^9, 3.603028890183897*^9}, {3.603028920440963*^9, 
+   3.603028923051135*^9}, {3.603029001662982*^9, 3.603029049162875*^9}, {
+   3.6030291264433603`*^9, 3.6030291383805027`*^9}, {3.603029210921153*^9, 
+   3.603029255790023*^9}, {3.603029365512436*^9, 3.60302936991464*^9}, {
+   3.603029433052772*^9, 3.603029447466133*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"updateNB", "[", "path_", "]"}], ":=", 
+  RowBox[{"Replace", "[", 
+   RowBox[{
+    RowBox[{"Import", "[", "path", "]"}], ",", 
+    RowBox[{"{", 
+     RowBox[{
+      RowBox[{"nb_Notebook", "\[RuleDelayed]", 
+       RowBox[{"NotebookPut", "[", 
+        RowBox[{"nb", "/.", 
+         RowBox[{
+          RowBox[{"x", ":", 
+           RowBox[{"TemplateBox", "[", 
+            RowBox[{"_", ",", 
+             RowBox[{"\"\<Entity\>\"", "|", "\"\<EntityProperty\>\""}], ",", 
+             "___"}], "]"}]}], "\[RuleDelayed]", 
+          RowBox[{"ToBoxes", "@", 
+           RowBox[{"updateEP", "@", 
+            RowBox[{"ToExpression", "[", "x", "]"}]}]}]}]}], "]"}]}], ",", 
+      RowBox[{"_", "\[Rule]", "$Failed"}]}], "}"}]}], "]"}]}]], "Input",
+ CellChangeTimes->{{3.6030301875528183`*^9, 3.6030301896514597`*^9}, {
+  3.603030235675935*^9, 3.6030302543058033`*^9}}]
+}, Open  ]]
+}, Closed]],
+
+Cell[CellGroupData[{
+
+Cell["RiemannHypothesisFormulation", "Section",
+ CellChangeTimes->{{3.6935720613880167`*^9, 3.693572068041397*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Entities", "Subsection",
+ CellChangeTimes->{{3.693572102481694*^9, 3.69357210350441*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ev", "[", 
+  RowBox[{"\"\<RiemannHypothesisFormulation\>\"", ",", "\"\<Entities\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.69357131754744*^9, 3.693571325967499*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TemplateBox[{
+    "\"Bombieri\[Hyphen]Weil inequality\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BombieriWeilInequality\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BombieriWeilInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation A\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationA\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationA\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation B\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationB\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationB\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation C\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationC\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationC\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation D\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationD\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationD\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation E\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationE\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationE\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation F\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationF\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationF\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation G\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationG\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationG\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation H\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BuiLesterMilinovichFormulationH\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationH\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Carneiro\[Hyphen]Chandee\[Hyphen]Milinovich formulation\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"CarneiroChandeeMilinovichFormulation\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"CarneiroChandeeMilinovichFormulation\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Codec\[AGrave]\[Hyphen]Verjovsky estimate\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"CodecaVerjovskyEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"CodecaVerjovskyEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Conrey formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"ConreyFormulation\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"ConreyFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Hardy\[Hyphen]Littlewood estimate\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"HardyLittlewoodEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"HardyLittlewoodEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Hinkkanen formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"HinkkanenFormulation\""}],
+        "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"HinkkanenFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Kanemitsu\[Hyphen]Yoshimoto estimate A\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"KanemitsuYoshimotoEstimateA\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"KanemitsuYoshimotoEstimateA\\\"]\"","\"Riemann hypothesis formulation\""},
+    
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Kanemitsu\[Hyphen]Yoshimoto estimate B\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"KanemitsuYoshimotoEstimateB\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"KanemitsuYoshimotoEstimateB\\\"]\"","\"Riemann hypothesis formulation\""},
+    
+    "Entity"], ",", 
+   TemplateBox[{"\"Lagarias inequality\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LagariasInequality\""}], 
+       "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \\\"LagariasInequality\\\
+\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Landau estimate\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LandauEstimate\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LandauEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Levinson\[Hyphen]Montgomery formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"LevinsonMontgomeryFormulation\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LevinsonMontgomeryFormulation\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Li inequality\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"LiInequality\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \\\"LiInequality\
+\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Littlewood estimate A\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LittlewoodEstimateA\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LittlewoodEstimateA\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Littlewood estimate B\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LittlewoodEstimateB\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LittlewoodEstimateB\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Liu formulation A\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LiuFormulationA\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LiuFormulationA\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Liu formulation B\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LiuFormulationB\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LiuFormulationB\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Massias\[Hyphen]Nicolas\[Hyphen]Robin inequality A\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"MassiasNicolasRobinInequalityA\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"MassiasNicolasRobinInequalityA\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Massias\[Hyphen]Nicolas\[Hyphen]Robin inequality B\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"MassiasNicolasRobinInequalityB\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"MassiasNicolasRobinInequalityB\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Newman formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"NewmanFormulation\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NewmanFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]Liouville \[Lambda]\[Hyphen]estimate\
+\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"NicolaeVerjovskyLiouvilleLambdaEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyLiouvilleLambdaEstimate\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]Mangoldt estimate\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"NicolaeVerjovskyMangoldtEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyMangoldtEstimate\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]M\[ODoubleDot]bius estimate\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"NicolaeVerjovskyMoebiusEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyMoebiusEstimate\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Nicolae\[Hyphen]Verjovsky \[Phi]\[Hyphen]estimate\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"NicolaeVerjovskyPhiEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyPhiEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    
+    "Entity"], ",", 
+   TemplateBox[{"\"Nicolas formulation A\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"NicolasFormulationA\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolasFormulationA\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Nicolas formulation B\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"NicolasFormulationB\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolasFormulationB\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"P\[OAcute]lya formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"PolyaFormulation\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"PolyaFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"prime number estimate\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"PrimeNumberEstimate\""}], 
+       "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"PrimeNumberEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Redheffer formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"RedhefferFormulation\""}],
+        "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RedhefferFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Riemann hypothesis\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"RiemannHypothesis\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RiemannHypothesis\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Riesz estimate\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"RieszEstimate\""}],
+        "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RieszEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Robin inequality\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"RobinInequality\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RobinInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Schoenfeld formulation A\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"SchoenfeldFormulationA\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SchoenfeldFormulationA\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Schoenfeld formulation B\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"SchoenfeldFormulationB\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SchoenfeldFormulationB\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Schoenfeld formulation C\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"SchoenfeldFormulationC\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SchoenfeldFormulationC\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Spieser formulation\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"SpieserFormulation\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SpieserFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Volchkov integral\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"VolchkovIntegral\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"VolchkovIntegral\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"von Koch estimate\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"VonKochEstimate\""}], 
+       "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"VonKochEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.69357132727737*^9, {3.693572092814732*^9, 3.693572096908093*^9}}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Properties", "Subsection",
+ CellChangeTimes->{{3.6935721056158047`*^9, 3.693572106648388*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ev", "[", 
+  RowBox[{"\"\<RiemannHypothesisFormulation\>\"", ",", "\"\<Properties\>\""}],
+   "]"}]], "Input",
+ CellChangeTimes->{{3.69357131754744*^9, 3.693571325967499*^9}, {
+  3.693572108008486*^9, 3.693572110528667*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+       "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"FormattedReferences\""}], 
+       "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+       "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}], 
+       "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+     "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \\\"Name\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+       "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"References\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{
+    "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"RelatedWolframLanguageSymbols\""}], "]"}],
+     "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{
+    "\"relationship to Riemann hypothesis\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"RelationshipToRiemannHypothesis\""}], "]"}],
+     "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"StatementFormulation\""}],
+        "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+    "EntityProperty"], ",", 
+   TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+       "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+    "EntityProperty"]}], "}"}]], "Output",
+ CellChangeTimes->{3.693572111065474*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Entity-property query", "Subsection",
+ CellChangeTimes->{{3.693572133040963*^9, 3.693572138639351*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{"\"Bombieri\[Hyphen]Weil inequality\"",RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"BombieriWeilInequality\""}], "]"}],
+    "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BombieriWeilInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+   "Entity"], "@", 
+  TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+      RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}], 
+      "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+   "EntityProperty"]}]], "Input",
+ CellChangeTimes->{{3.693572126596253*^9, 3.69357212943056*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TemplateBox[{"\"Enrico Bombieri\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"Person\"", ",", "\"EnricoBombieri::74p74\""}], "]"}],
+     "\"Entity[\\\"Person\\\", \\\"EnricoBombieri::74p74\\\"]\"","\"person\""},
+    "Entity"], ",", 
+   TemplateBox[{"\"Andr\[EAcute] Weil\"",RowBox[{"Entity", "[", 
+       RowBox[{"\"Person\"", ",", "\"AndreWeil::9zjjy\""}], "]"}],
+     "\"Entity[\\\"Person\\\", \\\"AndreWeil::9zjjy\\\"]\"","\"person\""},
+    "Entity"]}], "}"}]], "Output",
+ CellChangeTimes->{3.693572130863058*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["All properties of an entity", "Subsection",
+ CellChangeTimes->{{3.69357215192037*^9, 3.6935721708867693`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{"\"Hinkkanen formulation\"",RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", "\"HinkkanenFormulation\""}], 
+      "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"HinkkanenFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+   "Entity"], "@", "\"\<PropertyAssociation\>\""}]], "Input",
+ CellChangeTimes->{{3.6935721780799828`*^9, 3.693572187686757*^9}}],
+
+Cell[BoxData[
+ RowBox[{"\[LeftAssociation]", 
+  RowBox[{
+   RowBox[{
+    TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+        "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"{", 
+     TemplateBox[{"\"derivative formulations\"",RowBox[{"EntityClass", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Derivative\""}], 
+         "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Derivative\\\"]\"","\"Riemann hypothesis formulations\""},
+      "EntityClass"], "}"}]}], ",", 
+   RowBox[{
+    TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{
+         "\"RiemannHypothesisFormulation\"", ",", "\"FormattedReferences\""}],
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"{", 
+     TemplateBox[{
+      "\"Aimo \"","\"Hinkkanen.  \"","\"\[OpenCurlyDoubleQuote]On \"",
+       "\"Functions \"","\"of \"","\"Bounded \"",
+       "\"Type.\[CloseCurlyDoubleQuote]\"","\" \"",StyleBox[
+       "\"Complex \"", Italic, StripOnInput -> False],StyleBox[
+       "\"Variables. \"", Italic, StripOnInput -> False],StyleBox[
+       "\"Theory \"", Italic, StripOnInput -> False],StyleBox[
+       "\"and \"", Italic, StripOnInput -> False],StyleBox[
+       "\"Application\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+       "\"34\"", Bold, StripOnInput -> False],"\", \"","\"119\"",
+       "\"\[Dash]\"","\"139, \"","\"1997.\""},
+      "RowDefault"], "}"}]}], ",", 
+   RowBox[{
+    TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{
+         "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+        "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    TemplateBox[{RowBox[{"\"1997\""}],RowBox[{"DateObject", "[", 
+        RowBox[{"{", "1997", "}"}], "]"}]},
+     "DateObject",
+     Editable->False]}], ",", 
+   RowBox[{
+    TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}], 
+        "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"{", 
+     TemplateBox[{"\"Aimo Hinkkanen\"",RowBox[{"Entity", "[", 
+         RowBox[{"\"Person\"", ",", "\"AimoHinkkanen::sbv4r\""}], "]"}],
+       "\"Entity[\\\"Person\\\", \\\"AimoHinkkanen::sbv4r\\\"]\"",
+       "\"person\""},
+      "Entity"], "}"}]}], ",", 
+   RowBox[{
+    TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+      "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+     "EntityProperty"], "\[Rule]", "\<\"Hinkkanen formulation\"\>"}], ",", 
+   RowBox[{
+    TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+        "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"References\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{"{", 
+      TemplateBox[{"\"Hinkkanen 1997\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"RiemannHypothesisSource\"", ",", "\"Hinkkanen1997\""}], 
+          "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \
+\\\"Hinkkanen1997\\\"]\"","\"Riemann hypothesis source\""},
+       "Entity"], "}"}], "}"}]}], ",", 
+   RowBox[{
+    TemplateBox[{
+     "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{
+         "\"RiemannHypothesisFormulation\"", ",", 
+          "\"RelatedWolframLanguageSymbols\""}], "]"}],
+      "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"{", 
+     RowBox[{
+      TemplateBox[{"\"ForAll\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"WolframLanguageSymbol\"", ",", "\"ForAll\""}], "]"}],
+        "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"ForAll\\\"]\"",
+        "\"Wolfram Language symbol\""},
+       "Entity"], ",", 
+      TemplateBox[{"\"Re\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Re\""}], "]"}],
+        "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Re\\\"]\"",
+        "\"Wolfram Language symbol\""},
+       "Entity"], ",", 
+      TemplateBox[{"\"Derivative\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Derivative\""}], "]"}],
+        "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Derivative\\\"]\"",
+        "\"Wolfram Language symbol\""},
+       "Entity"]}], "}"}]}], ",", 
+   RowBox[{
+    TemplateBox[{
+     "\"relationship to Riemann hypothesis\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{
+         "\"RiemannHypothesisFormulation\"", ",", 
+          "\"RelationshipToRiemannHypothesis\""}], "]"}],
+      "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+     "EntityProperty"], 
+    "\[Rule]", "\<\"equivalent to the Riemann hypothesis\"\>"}], ",", 
+   RowBox[{
+    TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{
+         "\"RiemannHypothesisFormulation\"", ",", 
+          "\"StatementFormulation\""}], "]"}],
+      "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"Function", "[", 
+     RowBox[{
+      RowBox[{"{", "\[FormalS]", "}"}], ",", 
+      RowBox[{
+       SubscriptBox["\[ForAll]", 
+        RowBox[{"\[FormalS]", ",", 
+         RowBox[{
+          RowBox[{"Re", "[", "\[FormalS]", "]"}], ">", 
+          FractionBox["1", "2"]}]}]], 
+       RowBox[{
+        RowBox[{"Re", "[", 
+         FractionBox[
+          RowBox[{
+           SuperscriptBox["RiemannXi", "\[Prime]",
+            MultilineFunction->None], "[", "\[FormalS]", "]"}], 
+          RowBox[{"RiemannXi", "[", "\[FormalS]", "]"}]], "]"}], ">", 
+        "0"}]}]}], "]"}]}], ",", 
+   RowBox[{
+    TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+        RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+        "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+     "EntityProperty"], "\[Rule]", 
+    RowBox[{"Missing", "[", "\<\"NotAvailable\"\>", "]"}]}]}], 
+  "\[RightAssociation]"}]], "Output",
+ CellChangeTimes->{3.6935721881045837`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Value of property for all entities", "Subsection",
+ CellChangeTimes->{{3.6935726291924763`*^9, 3.6935726344926167`*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"evs", "@", 
+  TemplateBox[{
+   "\"relationship to Riemann hypothesis\"",RowBox[{"EntityProperty", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"RelationshipToRiemannHypothesis\""}], "]"}],
+    "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+   "EntityProperty"]}]], "Input",
+ CellChangeTimes->{{3.693572637950097*^9, 3.693572638612587*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{
+      "\"Bombieri\[Hyphen]Weil inequality\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BombieriWeilInequality\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BombieriWeilInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation A\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationA\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationA\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation B\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationB\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationB\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation C\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationC\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationC\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation D\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationD\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationD\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation E\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationE\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationE\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation F\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationF\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationF\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation G\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationG\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationG\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation H\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"BuiLesterMilinovichFormulationH\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationH\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Carneiro\[Hyphen]Chandee\[Hyphen]Milinovich formulation\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"CarneiroChandeeMilinovichFormulation\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"CarneiroChandeeMilinovichFormulation\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Codec\[AGrave]\[Hyphen]Verjovsky estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"CodecaVerjovskyEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"CodecaVerjovskyEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Conrey formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"ConreyFormulation\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"ConreyFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Hardy\[Hyphen]Littlewood estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"HardyLittlewoodEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"HardyLittlewoodEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Hinkkanen formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"HinkkanenFormulation\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"HinkkanenFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Kanemitsu\[Hyphen]Yoshimoto estimate A\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"KanemitsuYoshimotoEstimateA\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"KanemitsuYoshimotoEstimateA\\\"]\"","\"Riemann hypothesis formulation\""},
+      
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Kanemitsu\[Hyphen]Yoshimoto estimate B\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"KanemitsuYoshimotoEstimateB\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"KanemitsuYoshimotoEstimateB\\\"]\"","\"Riemann hypothesis formulation\""},
+      
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Lagarias inequality\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"LagariasInequality\""}],
+          "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LagariasInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Landau estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"LandauEstimate\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LandauEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Levinson\[Hyphen]Montgomery formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"LevinsonMontgomeryFormulation\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LevinsonMontgomeryFormulation\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Li inequality\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"LiInequality\""}], 
+         "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LiInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Littlewood estimate A\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"LittlewoodEstimateA\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LittlewoodEstimateA\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Littlewood estimate B\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"LittlewoodEstimateB\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LittlewoodEstimateB\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Liu formulation A\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"LiuFormulationA\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LiuFormulationA\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Liu formulation B\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"LiuFormulationB\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LiuFormulationB\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Massias\[Hyphen]Nicolas\[Hyphen]Robin inequality A\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"MassiasNicolasRobinInequalityA\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"MassiasNicolasRobinInequalityA\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Massias\[Hyphen]Nicolas\[Hyphen]Robin inequality B\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"MassiasNicolasRobinInequalityB\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"MassiasNicolasRobinInequalityB\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Newman formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"NewmanFormulation\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NewmanFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]Liouville \
+\[Lambda]\[Hyphen]estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"NicolaeVerjovskyLiouvilleLambdaEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyLiouvilleLambdaEstimate\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]Mangoldt estimate\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"NicolaeVerjovskyMangoldtEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyMangoldtEstimate\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]M\[ODoubleDot]bius estimate\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"NicolaeVerjovskyMoebiusEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyMoebiusEstimate\\\"]\"",
+       "\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{
+      "\"Nicolae\[Hyphen]Verjovsky \[Phi]\[Hyphen]estimate\"",
+       RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"NicolaeVerjovskyPhiEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyPhiEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Nicolas formulation A\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"NicolasFormulationA\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolasFormulationA\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Nicolas formulation B\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"NicolasFormulationB\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolasFormulationB\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"P\[OAcute]lya formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"PolyaFormulation\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"PolyaFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"prime number estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"PrimeNumberEstimate\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"PrimeNumberEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Redheffer formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RedhefferFormulation\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RedhefferFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Riemann hypothesis\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"RiemannHypothesis\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RiemannHypothesis\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"the Riemann hypothesis original formulation\"\>"},
+    {
+     TemplateBox[{"\"Riesz estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"RieszEstimate\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RieszEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Robin inequality\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"RobinInequality\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RobinInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Schoenfeld formulation A\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"SchoenfeldFormulationA\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SchoenfeldFormulationA\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Schoenfeld formulation B\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"SchoenfeldFormulationB\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SchoenfeldFormulationB\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Schoenfeld formulation C\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"SchoenfeldFormulationC\""}], "]"}],
+       "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SchoenfeldFormulationC\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Spieser formulation\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"SpieserFormulation\""}],
+          "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"SpieserFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"Volchkov integral\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"VolchkovIntegral\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"VolchkovIntegral\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"von Koch estimate\"",RowBox[{"Entity", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"VonKochEstimate\""}], 
+         "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"VonKochEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+      "Entity"], "\<\"equivalent to the Riemann hypothesis\"\>"}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.6935726400472727`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"evs", "@", 
+  TemplateBox[{"\"Hinkkanen formulation\"",RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", "\"HinkkanenFormulation\""}], 
+      "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"HinkkanenFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+   "Entity"]}]], "Input",
+ CellChangeTimes->{{3.693572157976603*^9, 3.693572158655416*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{"\"derivative formulations\"",RowBox[{"EntityClass", "[", 
+          RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Derivative\""}],
+           "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Derivative\\\"]\"","\"Riemann hypothesis formulations\""},
+       "EntityClass"], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"Aimo \"","\"Hinkkanen.  \"","\"\[OpenCurlyDoubleQuote]On \"",
+        "\"Functions \"","\"of \"","\"Bounded \"",
+        "\"Type.\[CloseCurlyDoubleQuote]\"","\" \"",StyleBox[
+        "\"Complex \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Variables. \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Theory \"", Italic, StripOnInput -> False],StyleBox[
+        "\"and \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Application\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"34\"", Bold, StripOnInput -> False],"\", \"","\"119\"",
+        "\"\[Dash]\"","\"139, \"","\"1997.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"1997\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "1997", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{"\"Aimo Hinkkanen\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"Person\"", ",", "\"AimoHinkkanen::sbv4r\""}], "]"}],
+        "\"Entity[\\\"Person\\\", \\\"AimoHinkkanen::sbv4r\\\"]\"",
+        "\"person\""},
+       "Entity"], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Hinkkanen formulation\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"References\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Hinkkanen 1997\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"Hinkkanen1997\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \\\"Hinkkanen1997\
+\\\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"ForAll\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"ForAll\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"ForAll\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Re\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Re\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Re\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Derivative\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Derivative\""}], 
+           "]"}],"\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Derivative\\\"]\
+\"","\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", "\[FormalS]", "}"}], ",", 
+       RowBox[{
+        SubscriptBox["\[ForAll]", 
+         RowBox[{"\[FormalS]", ",", 
+          RowBox[{
+           RowBox[{"Re", "[", "\[FormalS]", "]"}], ">", 
+           FractionBox["1", "2"]}]}]], 
+        RowBox[{
+         RowBox[{"Re", "[", 
+          FractionBox[
+           RowBox[{
+            SuperscriptBox["RiemannXi", "\[Prime]",
+             MultilineFunction->None], "[", "\[FormalS]", "]"}], 
+           RowBox[{"RiemannXi", "[", "\[FormalS]", "]"}]], "]"}], ">", 
+         "0"}]}]}], "]"}]}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.6935721603473873`*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["EntityClasses", "Subsection",
+ CellChangeTimes->{{3.693572102481694*^9, 3.69357210350441*^9}, {
+  3.693572212342935*^9, 3.693572214421611*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"ev", "[", 
+  RowBox[{
+  "\"\<RiemannHypothesisFormulation\>\"", ",", "\"\<EntityClasses\>\""}], 
+  "]"}]], "Input",
+ CellChangeTimes->{{3.69357131754744*^9, 3.693571325967499*^9}, {
+  3.693572201215876*^9, 3.693572203622302*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TemplateBox[{
+    "\"Riemann hypothesis formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "All"}], "]"}],
+     "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", All]\"",
+     "\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{
+    "\"big\[Hyphen]\[ScriptCapitalO] estimates\"",
+     RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"BigOEstimate\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BigOEstimate\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{
+    "\"big\[Hyphen]\[CapitalOmega] estimates\"",RowBox[{"EntityClass", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"BigOmegaEstimate\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BigOmegaEstimate\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{"\"derivative formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Derivative\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Derivative\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{"\"inequality formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Inequality\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Inequality\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{"\"infinite sum formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"InfiniteSum\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"InfiniteSum\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{"\"integral formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Integral\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Integral\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{
+    "\"integral transform formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"IntegralTransform\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"IntegralTransform\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{"\"limit formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Limit\""}], "]"}],
+     "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \\\"Limit\\\"]\"",
+     "\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{
+    "\"little\[Hyphen]\[ScriptO] estimates\"",RowBox[{"EntityClass", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", "\"LittleOEstimate\""}], 
+       "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"LittleOEstimate\\\"]\"","\"Riemann hypothesis formulations\""},
+    "EntityClass"], ",", 
+   TemplateBox[{"\"matrix formulations\"",RowBox[{"EntityClass", "[", 
+       RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Matrix\""}], "]"}],
+     "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \\\"Matrix\\\"]\"",
+     "\"Riemann hypothesis formulations\""},
+    "EntityClass"]}], "}"}]], "Output",
+ CellChangeTimes->{3.693572204583346*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"EntityList", "@", 
+  TemplateBox[{
+   "\"integral transform formulations\"",RowBox[{"EntityClass", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", "\"IntegralTransform\""}], 
+      "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"IntegralTransform\\\"]\"","\"Riemann hypothesis formulations\""},
+   "EntityClass"]}]], "Input",
+ CellChangeTimes->{{3.69357222866247*^9, 3.6935722407102737`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TemplateBox[{
+    "\"Bombieri\[Hyphen]Weil inequality\"",RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"BombieriWeilInequality\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BombieriWeilInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Nicolae\[Hyphen]Verjovsky\[Hyphen]Mangoldt estimate\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"NicolaeVerjovskyMangoldtEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyMangoldtEstimate\\\"]\"",
+     "\"Riemann hypothesis formulation\""},
+    "Entity"], ",", 
+   TemplateBox[{
+    "\"Nicolae\[Hyphen]Verjovsky \[Phi]\[Hyphen]estimate\"",
+     RowBox[{"Entity", "[", 
+       RowBox[{
+        "\"RiemannHypothesisFormulation\"", ",", 
+         "\"NicolaeVerjovskyPhiEstimate\""}], "]"}],
+     "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"NicolaeVerjovskyPhiEstimate\\\"]\"","\"Riemann hypothesis formulation\""},
+    
+    "Entity"]}], "}"}]], "Output",
+ CellChangeTimes->{{3.693572230854993*^9, 3.693572241242342*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Issues", "Section",
+ CellChangeTimes->{{3.693572960450293*^9, 3.693572961209264*^9}}],
+
+Cell[CellGroupData[{
+
+Cell["Bombieri\[Hyphen]Weil inequality", "Subsection",
+ CellChangeTimes->{3.693572990080081*^9}],
+
+Cell["\<\
+Given that the WL function ZetaZero gives only zeros on the critical line \
+(rather than all non-trivial zeros), doesn\[CloseCurlyQuote]t the condition \
+as stated here hold regardless of the truth of the RH?\
+\>", "Text",
+ CellChangeTimes->{{3.6896066777412148`*^9, 3.689606710130691*^9}, {
+  3.68960703030765*^9, 3.689607056881186*^9}, {3.689609106118572*^9, 
+  3.689609152725869*^9}, {3.689609395079664*^9, 3.6896094039099073`*^9}},
+ Background->RGBColor[1, 1, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"?", "ZetaZero"}]], "Input",
+ CellChangeTimes->{{3.693572998634255*^9, 3.693573002676916*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  StyleBox["\<\"\\!\\(\\*RowBox[{\\\"ZetaZero\\\", \\\"[\\\", \
+StyleBox[\\\"k\\\", \\\"TI\\\"], \\\"]\\\"}]\\) represents the \
+\\!\\(\\*StyleBox[\\\"k\\\", \
+\\\"TI\\\"]\\)\\!\\(\\*SuperscriptBox[\\\"\[Null]\\\", \\\"th\\\"]\\) zero of \
+the Riemann zeta function on the critical \
+line.\\n\\!\\(\\*RowBox[{\\\"ZetaZero\\\", \\\"[\\\", \
+RowBox[{StyleBox[\\\"k\\\", \\\"TI\\\"], \\\",\\\", StyleBox[\\\"t\\\", \
+\\\"TI\\\"]}], \\\"]\\\"}]\\) represents the \\!\\(\\*StyleBox[\\\"k\\\", \
+\\\"TI\\\"]\\)\\!\\(\\*SuperscriptBox[\\\"\[Null]\\\", \\\"th\\\"]\\) zero \
+with imaginary part greater than \\!\\(\\*StyleBox[\\\"t\\\", \\\"TI\\\"]\\).\
+\"\>", "MSG"], "\[NonBreakingSpace]", 
+  ButtonBox[
+   StyleBox["\[RightSkeleton]", "SR"],
+   Active->True,
+   BaseStyle->"Link",
+   ButtonData->"paclet:ref/ZetaZero"]}]], "Print", "PrintUsage",
+ CellChangeTimes->{3.693573003076453*^9},
+ CellTags->"Info1323693551402-8564558"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{"\"Bombieri\[Hyphen]Weil inequality\"",RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"BombieriWeilInequality\""}], "]"}],
+    "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BombieriWeilInequality\\\"]\"","\"Riemann hypothesis formulation\""},
+   "Entity"], "//", "evs"}]], "Input",
+ CellChangeTimes->{{3.693572973266787*^9, 3.693572976737204*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{
+        "\"inequality formulations\"",RowBox[{"EntityClass", "[", 
+           
+           RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+             "\"Inequality\""}], "]"}],
+         "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Inequality\\\"]\"","\"Riemann hypothesis formulations\""},
+        "EntityClass"], ",", 
+       TemplateBox[{
+        "\"infinite sum formulations\"",RowBox[{"EntityClass", "[", 
+           
+           RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+             "\"InfiniteSum\""}], "]"}],
+         "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \\\"InfiniteSum\
+\\\"]\"","\"Riemann hypothesis formulations\""},
+        "EntityClass"], ",", 
+       TemplateBox[{
+        "\"integral transform formulations\"",RowBox[{"EntityClass", "[", 
+           
+           RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+             "\"IntegralTransform\""}], "]"}],
+         "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"IntegralTransform\\\"]\"","\"Riemann hypothesis formulations\""},
+        "EntityClass"]}], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"Enrico \"","\"Bombieri.  \"","\"\[OpenCurlyDoubleQuote]Remarks \"",
+        "\"on \"","\"Weil's \"","\"Quadratic \"","\"Functional \"","\"in \"",
+        "\"the \"","\"Theory \"","\"of \"","\"Prime \"","\"Numbers, \"",
+        "\"I.\[CloseCurlyDoubleQuote]\"","\" \"",StyleBox[
+        "\"Atti \"", Italic, StripOnInput -> False],StyleBox[
+        "\"della \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Accademia \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Nazionale \"", Italic, StripOnInput -> False],StyleBox[
+        "\"dei \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Lincei. \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Classe \"", Italic, StripOnInput -> False],StyleBox[
+        "\"di \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Scienze \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Fisiche, \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Matematiche \"", Italic, StripOnInput -> False],StyleBox[
+        "\"e \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Naturali. \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Rendiconti \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Lincei. \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Serie \"", Italic, StripOnInput -> False],StyleBox[
+        "\"IX. \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Matematica \"", Italic, StripOnInput -> False],StyleBox[
+        "\"e \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Applicazioni\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"11\"", Bold, StripOnInput -> False],"\", \"","\"183\"",
+        "\"\[Dash]\"","\"233, \"","\"2000.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"2000\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "2000", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Enrico Bombieri\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"EnricoBombieri::74p74\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"EnricoBombieri::74p74\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Andr\[EAcute] Weil\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"AndreWeil::9zjjy\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"AndreWeil::9zjjy\\\"]\"","\"person\""},
+        
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Bombieri\[Hyphen]Weil inequality\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"References\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Bombieri 2000\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"Bombieri2000\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \
+\\\"Bombieri2000\\\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"ForAll\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"ForAll\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"ForAll\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Exists\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Exists\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Exists\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Sum\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Sum\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Sum\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"MellinTransform\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"MellinTransform\""}], 
+           "]"}],"\"Entity[\\\"WolframLanguageSymbol\\\", \\\"MellinTransform\
+\\\"]\"","\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"ZetaZero\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"ZetaZero\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"ZetaZero\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Conjugate\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Conjugate\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Conjugate\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"equivalent to the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[FormalF]", ",", "\[FormalX]", ",", "\[FormalN]"}], "}"}], 
+       ",", 
+       RowBox[{
+        SubscriptBox["\[ForAll]", 
+         RowBox[{"\[FormalF]", ",", 
+          RowBox[{
+           RowBox[{"\[FormalF]", "\[Element]", 
+            RowBox[{
+            "PureMath`ContinuouslyDifferentiableC", "[", "\[Infinity]", 
+             "]"}]}], "&&", 
+           RowBox[{
+            SubscriptBox["\[Exists]", "\[FormalX]"], 
+            RowBox[{
+             RowBox[{"\[FormalF]", "[", "\[FormalX]", "]"}], "\[NotEqual]", 
+             "0"}]}]}]}]], 
+        RowBox[{
+         TemplateBox[{RowBox[{
+             RowBox[{"MellinTransform", "[", 
+               RowBox[{
+                 RowBox[{"\[FormalF]", "[", "\[FormalX]", "]"}], ",", 
+                 "\[FormalX]", ",", 
+                 RowBox[{"ZetaZero", "[", "\[FormalN]", "]"}]}], "]"}], " ", 
+             RowBox[{"Conjugate", "[", 
+               RowBox[{"MellinTransform", "[", 
+                 RowBox[{
+                   RowBox[{"\[FormalF]", "[", "\[FormalX]", "]"}], ",", 
+                   "\[FormalX]", ",", 
+                   RowBox[{"Conjugate", "[", 
+                    RowBox[{"1", "-", 
+                    RowBox[{"ZetaZero", "[", "\[FormalN]", "]"}]}], "]"}]}], 
+                 "]"}], "]"}]}],"\[FormalN]","1","\[Infinity]"},
+          "InactiveSum",
+          DisplayFunction->(RowBox[{
+             UnderoverscriptBox[
+              StyleBox["\[Sum]", "Inactive"], 
+              RowBox[{#2, "=", #3}], #4], #}]& ),
+          InterpretationFunction->(RowBox[{
+             RowBox[{"Inactive", "[", "Sum", "]"}], "[", 
+             RowBox[{#, ",", 
+               RowBox[{"{", 
+                 RowBox[{#2, ",", #3, ",", #4}], "}"}]}], "]"}]& )], ">", 
+         "0"}]}]}], "]"}]},
+    {
+     TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+      "EntityProperty"], 
+     GraphicsBox[{{}, 
+       GraphicsComplexBox[{{1940.9022170455498`, 1.}, {2027.0422472994223`, 
+        1.}, {1906.341616896334, 2.}, {1998.5953934968118`, 2.}}, {{{}, {}, 
+          {Hue[0.67, 0.6, 0.6], AbsoluteThickness[2], LineBox[{1, 2}]}, 
+          {Hue[0.67, 0.6, 0.6], AbsoluteThickness[2], LineBox[{3, 4}]}}, {
+          {Hue[0.67, 0.6, 0.6], AbsoluteThickness[2], 
+           TagBox[InsetBox["\[FilledSmallSquare]", 1],
+            "InsetString"], 
+           TagBox[InsetBox["\[FilledSmallSquare]", 2],
+            "InsetString"]}, 
+          {Hue[0.67, 0.6, 0.6], AbsoluteThickness[2], 
+           TagBox[InsetBox["\[FilledSmallSquare]", 3],
+            "InsetString"], 
+           TagBox[InsetBox["\[FilledSmallSquare]", 4],
+            "InsetString"]}, {}}}], {}},
+      AspectRatio->Full,
+      AxesLabel->{None, None},
+      AxesOrigin->{1920., 0},
+      BaseStyle->{CellBaseline -> Baseline},
+      Frame->{{True, False}, {True, False}},
+      FrameLabel->{None, None},
+      FrameStyle->{{
+         Opacity[0], None}, {None, None}},
+      FrameTicks->{{{{1., 
+           FormBox[
+            StyleBox[
+            "\"Enrico Bombieri\"", {FontSize -> 9, FontFamily -> "Verdana"}, 
+             StripOnInput -> False], TraditionalForm], 0}, {2., 
+           FormBox[
+            StyleBox[
+            "\"Andr\[EAcute] Weil\"", {
+             FontSize -> 9, FontFamily -> "Verdana"}, StripOnInput -> False], 
+            TraditionalForm], 0}}, None}, {{{1900, 
+           FormBox["\"1900\"", TraditionalForm]}, {1920, 
+           FormBox["\"1920\"", TraditionalForm]}, {1940, 
+           FormBox["\"1940\"", TraditionalForm]}, {1960, 
+           FormBox["\"1960\"", TraditionalForm]}, {1980, 
+           FormBox["\"1980\"", TraditionalForm]}, {2000, 
+           FormBox["\"2000\"", TraditionalForm]}}, None}},
+      FrameTicksStyle->{{
+         Opacity[1], None}, {None, None}},
+      GridLines->{{1900, 1920, 1940, 1960, 1980, 2000}, {1., 2.}},
+      GridLinesStyle->GrayLevel[0.9],
+      ImageSize->{500, 56.},
+      LabelStyle->{FontSize -> 10, FontFamily -> "Verdana"},
+      Method->{},
+      PlotRange->NCache[{{
+          Rational[12161332669396457, 6379711201080], 
+          Rational[12868730738648543, 6379711201080]}, {0, 2.5}}, {{
+         1906.2512841235987`, 2017.1337436826357`}, {0, 2.5}}],
+      PlotRangeClipping->True,
+      PlotRangePadding->{{
+         Scaled[0.05], Automatic}, {0, 0}},
+      Prolog->{
+        Opacity[0], 
+        TagBox[
+         RectangleBox[
+          Scaled[{0, 0}], 
+          Scaled[{1, 1}]], Annotation[#, "Plot", "Frame"]& ]},
+      TicksStyle->Directive[FontFamily -> "Times", FontSize -> 10]]}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.69357297891838*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation E", "Subsection",
+ CellChangeTimes->{3.693573081288597*^9}],
+
+Cell[TextData[{
+ "E: The condition on ",
+ Cell[BoxData[
+  FormBox["h", TraditionalForm]]],
+ " given in the paper is not reflected here:"
+}], "Text",
+ CellChangeTimes->{{3.6896066777412148`*^9, 3.689606710130691*^9}, {
+  3.68960703030765*^9, 3.689607056881186*^9}, {3.689609106118572*^9, 
+  3.689609152725869*^9}, {3.689609395079664*^9, 3.6896094039099073`*^9}, {
+  3.689623010454582*^9, 3.68962303021089*^9}, {3.689623287695636*^9, 
+  3.689623288123863*^9}},
+ Background->RGBColor[1, 1, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{
+   "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation E\"",
+    RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"BuiLesterMilinovichFormulationE\""}], "]"}],
+    "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationE\\\"]\"",
+    "\"Riemann hypothesis formulation\""},
+   "Entity"], "//", "evs"}]], "Input",
+ CellChangeTimes->{{3.693573072700412*^9, 3.6935730732429047`*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{
+        "\"big\[Hyphen]\[CapitalOmega] estimates\"",
+         RowBox[{"EntityClass", "[", 
+           
+           RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+             "\"BigOmegaEstimate\""}], "]"}],
+         "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BigOmegaEstimate\\\"]\"","\"Riemann hypothesis formulations\""},
+        "EntityClass"], ",", 
+       TemplateBox[{"\"integral formulations\"",RowBox[{"EntityClass", "[", 
+           RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Integral\""}], 
+           "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Integral\\\"]\"","\"Riemann hypothesis formulations\""},
+        "EntityClass"]}], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"Hung \"","\"Manh \"","\"Bui, \"","\"Stephen \"","\"J. \"",
+        "\"Lester,\"","\" and \"","\"Micah \"","\"B. \"","\"Milinovich.  \"",
+        "\"\[OpenCurlyDoubleQuote]On \"","\"Balazard, \"","\"Saias, \"",
+        "\"and \"","\"Yor's \"","\"Equivalence \"","\"to \"","\"the \"",
+        "\"Riemann \"","\"Hypothesis.\[CloseCurlyDoubleQuote]\"","\" \"",
+        StyleBox["\"Journal \"", Italic, StripOnInput -> False],StyleBox[
+        "\"of \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Mathematical \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Analysis \"", Italic, StripOnInput -> False],StyleBox[
+        "\"and \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Applications\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"409\"", Bold, StripOnInput -> False],"\", \"","\"244\"",
+        "\"\[Dash]\"","\"253, \"","\"2014.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"2014\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "2014", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Hung Manh Bui\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"HungManhBui::22p83\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"HungManhBui::22p83\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Stephen J. Lester\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"StephenJLester::4swdx\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"StephenJLester::4swdx\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Micah B. Milinovich\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"MicahBMilinovich::655x7\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"MicahBMilinovich::655x7\\\"]\"",
+         "\"person\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Bui\[Hyphen]Lester\[Hyphen]Milinovich \
+formulation E\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"References\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Bui et al. 2014\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"BuiEtAl2014\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \\\"BuiEtAl2014\\\
+\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Integrate\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Integrate\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Integrate\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Log\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Log\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Log\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Abs\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Abs\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Abs\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Zeta\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Zeta\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Zeta\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[FormalH]", ",", "\[FormalT]", ",", "\[FormalU]"}], "}"}], 
+       ",", 
+       RowBox[{
+        TemplateBox[{RowBox[{"Log", "[", 
+            RowBox[{"Abs", "[", 
+              RowBox[{"Zeta", "[", 
+                RowBox[{
+                  FractionBox["1", "2"], "+", 
+                  RowBox[{"\[ImaginaryI]", " ", "\[FormalU]"}]}], "]"}], 
+              "]"}], "]"}],"\[FormalU]",
+          RowBox[{"\[FormalT]", "-", "\[FormalH]"}],
+          RowBox[{"\[FormalT]", "+", "\[FormalH]"}]},
+         "InactiveIntegrate",
+         DisplayFunction->(RowBox[{
+            SubsuperscriptBox[
+             StyleBox["\[Integral]", "Inactive"], #3, #4], 
+            RowBox[{#, 
+              RowBox[{
+                StyleBox["\[DifferentialD]", "Inactive"], #2}]}]}]& ),
+         InterpretationFunction->(RowBox[{
+            RowBox[{"Inactive", "[", "Integrate", "]"}], "[", 
+            RowBox[{#, ",", 
+              RowBox[{"{", 
+                RowBox[{#2, ",", #3, ",", #4}], "}"}]}], "]"}]& )], 
+        "\[Equal]", 
+        RowBox[{"PureMath`BigOmegaPlusMinus", "[", 
+         RowBox[{
+          RowBox[{"\[FormalH]", " ", 
+           SqrtBox[
+            FractionBox[
+             RowBox[{"Log", "[", "\[FormalT]", "]"}], 
+             RowBox[{"Log", "[", 
+              RowBox[{"Log", "[", "\[FormalT]", "]"}], "]"}]]]}], ",", 
+          "\[FormalT]", ",", "\[Infinity]"}], "]"}]}]}], "]"}]},
+    {
+     TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+      "EntityProperty"], "$Failed"}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.693573075007819*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation F", "Subsection",
+ CellChangeTimes->{{3.693573081288597*^9, 3.693573096077642*^9}}],
+
+Cell["F: The paper attributes this result to H.L. Montgomery.", "Text",
+ CellChangeTimes->{{3.6896066777412148`*^9, 3.689606710130691*^9}, {
+   3.68960703030765*^9, 3.689607056881186*^9}, {3.689609106118572*^9, 
+   3.689609152725869*^9}, {3.689609395079664*^9, 3.6896094039099073`*^9}, {
+   3.689623010454582*^9, 3.68962303021089*^9}, {3.689623287695636*^9, 
+   3.689623288123863*^9}, {3.6896236314490023`*^9, 3.6896236503105593`*^9}, 
+   3.693573109508359*^9},
+ Background->RGBColor[1, 1, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{
+   "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation F\"",
+    RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"BuiLesterMilinovichFormulationF\""}], "]"}],
+    "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationF\\\"]\"",
+    "\"Riemann hypothesis formulation\""},
+   "Entity"], "//", "evs"}]], "Input",
+ CellChangeTimes->{{3.693573121962826*^9, 3.693573122417615*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"big\[Hyphen]\[CapitalOmega] estimates\"",RowBox[{"EntityClass", "[", 
+          
+          RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+            "\"BigOmegaEstimate\""}], "]"}],
+        "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BigOmegaEstimate\\\"]\"","\"Riemann hypothesis formulations\""},
+       "EntityClass"], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"Hung \"","\"Manh \"","\"Bui, \"","\"Stephen \"","\"J. \"",
+        "\"Lester,\"","\" and \"","\"Micah \"","\"B. \"","\"Milinovich.  \"",
+        "\"\[OpenCurlyDoubleQuote]On \"","\"Balazard, \"","\"Saias, \"",
+        "\"and \"","\"Yor's \"","\"Equivalence \"","\"to \"","\"the \"",
+        "\"Riemann \"","\"Hypothesis.\[CloseCurlyDoubleQuote]\"","\" \"",
+        StyleBox["\"Journal \"", Italic, StripOnInput -> False],StyleBox[
+        "\"of \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Mathematical \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Analysis \"", Italic, StripOnInput -> False],StyleBox[
+        "\"and \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Applications\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"409\"", Bold, StripOnInput -> False],"\", \"","\"244\"",
+        "\"\[Dash]\"","\"253, \"","\"2014.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"2014\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "2014", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Hung Manh Bui\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"HungManhBui::22p83\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"HungManhBui::22p83\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Stephen J. Lester\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"StephenJLester::4swdx\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"StephenJLester::4swdx\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Micah B. Milinovich\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"MicahBMilinovich::655x7\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"MicahBMilinovich::655x7\\\"]\"",
+         "\"person\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Bui\[Hyphen]Lester\[Hyphen]Milinovich \
+formulation F\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \\\"References\
+\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Bui et al. 2014\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"BuiEtAl2014\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \\\"BuiEtAl2014\\\
+\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Pi\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Pi\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Pi\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Im\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Im\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Im\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Log\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Log\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Log\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Zeta\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Zeta\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Zeta\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", "\[FormalT]", "}"}], ",", 
+       RowBox[{
+        FractionBox[
+         RowBox[{"Im", "[", 
+          RowBox[{"Log", "[", 
+           RowBox[{"Zeta", "[", 
+            RowBox[{
+             FractionBox["1", "2"], "+", 
+             RowBox[{"\[ImaginaryI]", " ", "\[FormalT]"}]}], "]"}], "]"}], 
+          "]"}], "\[Pi]"], "\[Equal]", 
+        RowBox[{"PureMath`BigOmegaPlusMinus", "[", 
+         RowBox[{
+          SqrtBox[
+           FractionBox[
+            RowBox[{"Log", "[", "\[FormalT]", "]"}], 
+            RowBox[{"Log", "[", 
+             RowBox[{"Log", "[", "\[FormalT]", "]"}], "]"}]]], ",", 
+          "\[FormalT]", ",", "\[Infinity]"}], "]"}]}]}], "]"}]},
+    {
+     TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+      "EntityProperty"], "$Failed"}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.693573123780376*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation G,H", "Subsection",
+ CellChangeTimes->{{3.693573081288597*^9, 3.6935731020132647`*^9}}],
+
+Cell[TextData[{
+ "G,H: These do not specify how the function ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{"Im", " ", "log", " ", 
+    RowBox[{"\[Zeta]", "(", 
+     RowBox[{
+      FractionBox["1", "2"], "+", 
+      RowBox[{"\[ImaginaryI]", " ", "t"}]}], ")"}]}], TraditionalForm]]],
+ " is to be interpreted when ",
+ Cell[BoxData[
+  FormBox[
+   RowBox[{
+    FractionBox["1", "2"], "+", 
+    RowBox[{"\[ImaginaryI]", " ", "t"}]}], TraditionalForm]]],
+ " is a zero of the zeta function; contrast the reference. (Same issue \
+affects Carneiro-Chandee-Milinovich)"
+}], "Text",
+ CellChangeTimes->{{3.6896066777412148`*^9, 3.689606710130691*^9}, {
+  3.68960703030765*^9, 3.689607056881186*^9}, {3.689609106118572*^9, 
+  3.689609152725869*^9}, {3.689609395079664*^9, 3.6896094039099073`*^9}, {
+  3.689623010454582*^9, 3.68962303021089*^9}, {3.689623287695636*^9, 
+  3.689623288123863*^9}, {3.689623421593554*^9, 3.6896234589010468`*^9}, {
+  3.689623496228715*^9, 3.689623554961997*^9}, {3.6896883362254057`*^9, 
+  3.689688357055744*^9}},
+ Background->RGBColor[1, 1, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{
+   "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation G\"",
+    RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"BuiLesterMilinovichFormulationG\""}], "]"}],
+    "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationG\\\"]\"",
+    "\"Riemann hypothesis formulation\""},
+   "Entity"], "//", "evs"}]], "Input",
+ CellChangeTimes->{{3.693573134242619*^9, 3.693573134737376*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"big\[Hyphen]\[ScriptCapitalO] estimates\"",
+        RowBox[{"EntityClass", "[", 
+          
+          RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+            "\"BigOEstimate\""}], "]"}],
+        "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \\\"BigOEstimate\
+\\\"]\"","\"Riemann hypothesis formulations\""},
+       "EntityClass"], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"Hung \"","\"Manh \"","\"Bui, \"","\"Stephen \"","\"J. \"",
+        "\"Lester,\"","\" and \"","\"Micah \"","\"B. \"","\"Milinovich.  \"",
+        "\"\[OpenCurlyDoubleQuote]On \"","\"Balazard, \"","\"Saias, \"",
+        "\"and \"","\"Yor's \"","\"Equivalence \"","\"to \"","\"the \"",
+        "\"Riemann \"","\"Hypothesis.\[CloseCurlyDoubleQuote]\"","\" \"",
+        StyleBox["\"Journal \"", Italic, StripOnInput -> False],StyleBox[
+        "\"of \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Mathematical \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Analysis \"", Italic, StripOnInput -> False],StyleBox[
+        "\"and \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Applications\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"409\"", Bold, StripOnInput -> False],"\", \"","\"244\"",
+        "\"\[Dash]\"","\"253, \"","\"2014.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"2014\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "2014", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Hung Manh Bui\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"HungManhBui::22p83\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"HungManhBui::22p83\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Stephen J. Lester\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"StephenJLester::4swdx\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"StephenJLester::4swdx\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Micah B. Milinovich\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"MicahBMilinovich::655x7\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"MicahBMilinovich::655x7\\\"]\"",
+         "\"person\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Bui\[Hyphen]Lester\[Hyphen]Milinovich \
+formulation G\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \\\"References\
+\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Bui et al. 2014\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"BuiEtAl2014\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \\\"BuiEtAl2014\\\
+\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"MaxValue\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"MaxValue\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"MaxValue\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Im\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Im\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Im\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Log\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Log\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Log\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Zeta\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Zeta\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Zeta\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[FormalT]", ",", "\[FormalCapitalT]"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"MaxValue", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Im", "[", 
+             RowBox[{"Log", "[", 
+              RowBox[{"Zeta", "[", 
+               RowBox[{
+                FractionBox["1", "2"], "+", 
+                RowBox[{"\[ImaginaryI]", " ", "\[FormalT]"}]}], "]"}], "]"}], 
+             "]"}], ",", 
+            RowBox[{
+            "\[FormalCapitalT]", "\[LessEqual]", "\[FormalT]", "\[LessEqual]", 
+             RowBox[{"2", " ", "\[FormalCapitalT]"}]}]}], "}"}], ",", 
+          "\[FormalT]"}], "]"}], "\[GreaterEqual]", 
+        RowBox[{
+         SqrtBox[
+          FractionBox[
+           RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}], 
+           RowBox[{"Log", "[", 
+            RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}], "]"}]]], "+", 
+         RowBox[{"PureMath`BachmannLandauBigO", "[", 
+          RowBox[{
+           FractionBox[
+            SqrtBox[
+             RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}]], 
+            RowBox[{"Log", "[", 
+             RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}], "]"}]], ",", 
+           "\[FormalCapitalT]", ",", "\[Infinity]"}], "]"}]}]}]}], "]"}]},
+    {
+     TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+      "EntityProperty"], "$Failed"}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.693573136088028*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{
+   "\"Bui\[Hyphen]Lester\[Hyphen]Milinovich formulation H\"",
+    RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", 
+        "\"BuiLesterMilinovichFormulationH\""}], "]"}],
+    "\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"BuiLesterMilinovichFormulationH\\\"]\"",
+    "\"Riemann hypothesis formulation\""},
+   "Entity"], "//", "evs"}]], "Input",
+ CellChangeTimes->{{3.693573149258136*^9, 3.693573149760929*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"big\[Hyphen]\[ScriptCapitalO] estimates\"",
+        RowBox[{"EntityClass", "[", 
+          
+          RowBox[{"\"RiemannHypothesisFormulation\"", ",", 
+            "\"BigOEstimate\""}], "]"}],
+        "\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \\\"BigOEstimate\
+\\\"]\"","\"Riemann hypothesis formulations\""},
+       "EntityClass"], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"Hung \"","\"Manh \"","\"Bui, \"","\"Stephen \"","\"J. \"",
+        "\"Lester,\"","\" and \"","\"Micah \"","\"B. \"","\"Milinovich.  \"",
+        "\"\[OpenCurlyDoubleQuote]On \"","\"Balazard, \"","\"Saias, \"",
+        "\"and \"","\"Yor's \"","\"Equivalence \"","\"to \"","\"the \"",
+        "\"Riemann \"","\"Hypothesis.\[CloseCurlyDoubleQuote]\"","\" \"",
+        StyleBox["\"Journal \"", Italic, StripOnInput -> False],StyleBox[
+        "\"of \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Mathematical \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Analysis \"", Italic, StripOnInput -> False],StyleBox[
+        "\"and \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Applications\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"409\"", Bold, StripOnInput -> False],"\", \"","\"244\"",
+        "\"\[Dash]\"","\"253, \"","\"2014.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"2014\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "2014", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Hung Manh Bui\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"HungManhBui::22p83\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"HungManhBui::22p83\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Stephen J. Lester\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"StephenJLester::4swdx\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"StephenJLester::4swdx\\\"]\"",
+         "\"person\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Micah B. Milinovich\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"Person\"", ",", "\"MicahBMilinovich::655x7\""}], "]"}],
+         "\"Entity[\\\"Person\\\", \\\"MicahBMilinovich::655x7\\\"]\"",
+         "\"person\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Bui\[Hyphen]Lester\[Hyphen]Milinovich \
+formulation H\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \\\"References\
+\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Bui et al. 2014\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"BuiEtAl2014\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \\\"BuiEtAl2014\\\
+\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"MinValue\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"MinValue\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"MinValue\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Im\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Im\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Im\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Log\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Log\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Log\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Zeta\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Zeta\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Zeta\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[FormalT]", ",", "\[FormalCapitalT]"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{"MinValue", "[", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+            RowBox[{"Im", "[", 
+             RowBox[{"Log", "[", 
+              RowBox[{"Zeta", "[", 
+               RowBox[{
+                FractionBox["1", "2"], "+", 
+                RowBox[{"\[ImaginaryI]", " ", "\[FormalT]"}]}], "]"}], "]"}], 
+             "]"}], ",", 
+            RowBox[{
+            "\[FormalCapitalT]", "\[LessEqual]", "\[FormalT]", "\[LessEqual]", 
+             RowBox[{"2", " ", "\[FormalCapitalT]"}]}]}], "}"}], ",", 
+          "\[FormalT]"}], "]"}], "\[LessEqual]", 
+        RowBox[{
+         RowBox[{"-", 
+          SqrtBox[
+           FractionBox[
+            RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}], 
+            RowBox[{"Log", "[", 
+             RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}], "]"}]]]}], "+", 
+         RowBox[{"PureMath`BachmannLandauBigO", "[", 
+          RowBox[{
+           FractionBox[
+            SqrtBox[
+             RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}]], 
+            RowBox[{"Log", "[", 
+             RowBox[{"Log", "[", "\[FormalCapitalT]", "]"}], "]"}]], ",", 
+           "\[FormalCapitalT]", ",", "\[Infinity]"}], "]"}]}]}]}], "]"}]},
+    {
+     TemplateBox[{"\"timeline\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Timeline\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Timeline\\\"]\""},
+      "EntityProperty"], "$Failed"}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{3.693573151001196*^9}]
+}, Open  ]]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell["Conrey formulation", "Subsection",
+ CellChangeTimes->{{3.693573081288597*^9, 3.6935731020132647`*^9}, {
+  3.693573403096857*^9, 3.69357340557981*^9}}],
+
+Cell[TextData[{
+ " Should we quantify over ",
+ Cell[BoxData[
+  FormBox["k", TraditionalForm]]],
+ " here? Presumably this holds for all nonnegative integers ",
+ Cell[BoxData[
+  FormBox["k", TraditionalForm]]],
+ ". Is this result really due to Conrey?"
+}], "Text",
+ CellChangeTimes->{{3.6896066777412148`*^9, 3.689606710130691*^9}, {
+   3.68960703030765*^9, 3.689607056881186*^9}, {3.689609106118572*^9, 
+   3.689609152725869*^9}, {3.689609395079664*^9, 3.6896094039099073`*^9}, {
+   3.689623010454582*^9, 3.68962303021089*^9}, {3.689623287695636*^9, 
+   3.689623288123863*^9}, {3.689623421593554*^9, 3.6896234589010468`*^9}, {
+   3.689623496228715*^9, 3.689623554961997*^9}, {3.6896883362254057`*^9, 
+   3.689688357055744*^9}, {3.689689672272938*^9, 3.689689682333687*^9}, {
+   3.689691057535048*^9, 3.689691062092991*^9}, {3.6896918335455112`*^9, 
+   3.689691840367722*^9}, {3.689692537055118*^9, 3.6896926328511*^9}, 
+   3.693573377005772*^9, {3.693573408644012*^9, 3.6935734143241367`*^9}},
+ Background->RGBColor[1, 1, 0.85]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  TemplateBox[{"\"Conrey formulation\"",RowBox[{"Entity", "[", 
+      RowBox[{
+       "\"RiemannHypothesisFormulation\"", ",", "\"ConreyFormulation\""}], 
+      "]"}],"\"Entity[\\\"RiemannHypothesisFormulation\\\", \
+\\\"ConreyFormulation\\\"]\"","\"Riemann hypothesis formulation\""},
+   "Entity"], "//", "evs"}]], "Input",
+ CellChangeTimes->{{3.69357331003218*^9, 3.693573310486959*^9}, {
+  3.693573344909194*^9, 3.693573369813788*^9}}],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {
+     TemplateBox[{"\"classes\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Classes\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Classes\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{"\"derivative formulations\"",RowBox[{"EntityClass", "[", 
+          RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Derivative\""}],
+           "]"}],"\"EntityClass[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Derivative\\\"]\"","\"Riemann hypothesis formulations\""},
+       "EntityClass"], "}"}]},
+    {
+     TemplateBox[{"\"formatted references\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"FormattedReferences\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormattedReferences\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{
+       "\"John \"","\"Brian \"","\"Conrey.  \"",
+        "\"\[OpenCurlyDoubleQuote]The \"","\"Riemann \"",
+        "\"Hypothesis.\[CloseCurlyDoubleQuote]\"","\" \"",StyleBox[
+        "\"Notices \"", Italic, StripOnInput -> False],StyleBox[
+        "\"of \"", Italic, StripOnInput -> False],StyleBox[
+        "\"the \"", Italic, StripOnInput -> False],StyleBox[
+        "\"American \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Mathematical \"", Italic, StripOnInput -> False],StyleBox[
+        "\"Society\"", Italic, StripOnInput -> False],"\" \"",StyleBox[
+        "\"50\"", Bold, StripOnInput -> False],"\", \"","\"341\"",
+        "\"\[Dash]\"","\"363, \"","\"2003.\""},
+       "RowDefault"], "}"}]},
+    {
+     TemplateBox[{"\"formulation date\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", "\"FormulationDate\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"FormulationDate\\\"]\""},
+      "EntityProperty"], 
+     TemplateBox[{RowBox[{"\"2003\""}],RowBox[{"DateObject", "[", 
+         RowBox[{"{", "2003", "}"}], "]"}]},
+      "DateObject",
+      Editable->False]},
+    {
+     TemplateBox[{"\"formulators\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Formulators\""}],
+          "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Formulators\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      TemplateBox[{"\"John Brian Conrey\"",RowBox[{"Entity", "[", 
+          RowBox[{"\"Person\"", ",", "\"JohnBrianConrey::372q8\""}], "]"}],
+        "\"Entity[\\\"Person\\\", \\\"JohnBrianConrey::372q8\\\"]\"",
+        "\"person\""},
+       "Entity"], "}"}]},
+    {
+     TemplateBox[{"\"name\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"Name\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"Name\\\"]\""},
+      "EntityProperty"], "\<\"Conrey formulation\"\>"},
+    {
+     TemplateBox[{"\"reference citations\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{"\"RiemannHypothesisFormulation\"", ",", "\"References\""}], 
+         "]"}],"\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"References\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{"{", 
+       TemplateBox[{"\"Conrey 2003\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"RiemannHypothesisSource\"", ",", "\"Conrey2003\""}], 
+           "]"}],"\"Entity[\\\"RiemannHypothesisSource\\\", \
+\\\"Conrey2003\\\"]\"","\"Riemann hypothesis source\""},
+        "Entity"], "}"}], "}"}]},
+    {
+     TemplateBox[{
+      "\"related Wolfram Language symbols\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelatedWolframLanguageSymbols\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelatedWolframLanguageSymbols\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"{", 
+      RowBox[{
+       TemplateBox[{"\"Implies\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Implies\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Implies\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Derivative\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Derivative\""}], 
+           "]"}],"\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Derivative\\\"]\
+\"","\"Wolfram Language symbol\""},
+        "Entity"], ",", 
+       TemplateBox[{"\"Re\"",RowBox[{"Entity", "[", 
+           RowBox[{"\"WolframLanguageSymbol\"", ",", "\"Re\""}], "]"}],
+         "\"Entity[\\\"WolframLanguageSymbol\\\", \\\"Re\\\"]\"",
+         "\"Wolfram Language symbol\""},
+        "Entity"]}], "}"}]},
+    {
+     TemplateBox[{
+      "\"relationship to Riemann hypothesis\"",
+       RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"RelationshipToRiemannHypothesis\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"RelationshipToRiemannHypothesis\\\"]\""},
+      "EntityProperty"], "\<\"consequence of the Riemann hypothesis\"\>"},
+    {
+     TemplateBox[{"\"statement formulation\"",RowBox[{"EntityProperty", "[", 
+         RowBox[{
+          "\"RiemannHypothesisFormulation\"", ",", 
+           "\"StatementFormulation\""}], "]"}],
+       "\"EntityProperty[\\\"RiemannHypothesisFormulation\\\", \
+\\\"StatementFormulation\\\"]\""},
+      "EntityProperty"], 
+     RowBox[{"Function", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"\[FormalK]", ",", "\[FormalS]"}], "}"}], ",", 
+       RowBox[{
+        RowBox[{
+         RowBox[{
+          SuperscriptBox["RiemannXi", 
+           TagBox[
+            RowBox[{"(", "\[FormalK]", ")"}],
+            Derivative],
+           MultilineFunction->None], "[", "\[FormalS]", "]"}], "\[Equal]", 
+         "0"}], "\[Implies]", 
+        RowBox[{
+         RowBox[{"Re", "[", "\[FormalS]", "]"}], "\[Equal]", 
+         FractionBox["1", "2"]}]}]}], "]"}]}
+   },
+   AutoDelete->False,
+   FrameStyle->GrayLevel[0.7],
+   GridBoxAlignment->{"Columns" -> {{Left}}},
+   GridBoxFrame->{"Columns" -> {{True}}, "Rows" -> {{True}}},
+   GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+  "Grid"]], "Output",
+ CellChangeTimes->{
+  3.6935733124501047`*^9, {3.693573346557968*^9, 3.6935733711944036`*^9}}]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+},
+WindowSize->{953, 746},
+WindowMargins->{{12, Automatic}, {Automatic, 24}},
+FrontEndVersion->"11.1 for Mac OS X x86 (32-bit, 64-bit Kernel) (December 1, \
+2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{
+ "Info1323693551402-8564558"->{
+  Cell[107771, 2680, 946, 19, 67, "Print",
+   CellTags->"Info1323693551402-8564558"]}
+ }
+*)
+(*CellTagsIndex
+CellTagsIndex->{
+ {"Info1323693551402-8564558", 170567, 4126}
+ }
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 155, 2, 64, "Section"],
+Cell[CellGroupData[{
+Cell[760, 28, 142, 2, 44, "Subsection"],
+Cell[905, 32, 1143, 33, 138, "Input"],
+Cell[2051, 67, 1216, 37, 96, "Input"],
+Cell[3270, 106, 1419, 35, 201, "Input"],
+Cell[4692, 143, 428, 11, 54, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[5157, 159, 91, 1, 44, "Subsection"],
+Cell[5251, 162, 2737, 78, 243, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[8025, 245, 91, 1, 44, "Subsection"],
+Cell[8119, 248, 1259, 32, 117, "Input"],
+Cell[9381, 282, 611, 17, 54, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[10029, 304, 91, 1, 44, "Subsection"],
+Cell[10123, 307, 813, 21, 75, "Input"],
+Cell[10939, 330, 909, 24, 96, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11885, 359, 90, 1, 44, "Subsection"],
+Cell[11978, 362, 2806, 75, 222, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[14821, 442, 94, 1, 44, "Subsection"],
+Cell[14918, 445, 3697, 99, 198, "Input"],
+Cell[18618, 546, 10990, 291, 747, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[29645, 842, 92, 1, 44, "Subsection"],
+Cell[29740, 845, 11875, 309, 873, "Input"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41652, 1159, 98, 1, 44, "Subsection"],
+Cell[41753, 1162, 3293, 79, 181, "Input"],
+Cell[45049, 1243, 893, 22, 117, "Input"]
+}, Open  ]]
+}, Closed]],
+Cell[CellGroupData[{
+Cell[45991, 1271, 115, 1, 50, "Section"],
+Cell[CellGroupData[{
+Cell[46131, 1276, 95, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[46251, 1281, 196, 4, 32, "Input"],
+Cell[46450, 1287, 15838, 351, 374, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[62337, 1644, 100, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[62462, 1649, 247, 5, 32, "Input"],
+Cell[62712, 1656, 3012, 61, 73, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[65773, 1723, 109, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[65907, 1728, 697, 14, 41, "Input"],
+Cell[66607, 1744, 558, 11, 42, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[67214, 1761, 116, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[67355, 1766, 448, 8, 41, "Input"],
+Cell[67806, 1776, 6704, 146, 236, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[74559, 1928, 126, 1, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[74710, 1933, 455, 10, 41, "Input"],
+Cell[75168, 1945, 18951, 410, 1371, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[94156, 2360, 422, 8, 41, "Input"],
+Cell[94581, 2370, 6463, 145, 317, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[101093, 2521, 149, 2, 44, "Subsection"],
+Cell[CellGroupData[{
+Cell[101267, 2527, 253, 6, 32, "Input"],
+Cell[101523, 2535, 3601, 67, 104, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[105161, 2607, 454, 9, 41, "Input"],
+Cell[105618, 2618, 1252, 31, 42, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[106931, 2656, 91, 1, 64, "Section"],
+Cell[CellGroupData[{
+Cell[107047, 2661, 96, 1, 44, "Subsection"],
+Cell[107146, 2664, 480, 8, 65, "Text"],
+Cell[CellGroupData[{
+Cell[107651, 2676, 117, 2, 32, "Input"],
+Cell[107771, 2680, 946, 19, 67, "Print",
+ CellTags->"Info1323693551402-8564558"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[108754, 2704, 445, 9, 41, "Input"],
+Cell[109202, 2715, 13628, 296, 507, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[122879, 3017, 115, 1, 44, "Subsection"],
+Cell[122997, 3020, 493, 11, 47, "Text"],
+Cell[CellGroupData[{
+Cell[123515, 3035, 498, 12, 41, "Input"],
+Cell[124016, 3049, 9129, 201, 421, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[133194, 3256, 139, 1, 44, "Subsection"],
+Cell[133336, 3259, 496, 7, 46, "Text"],
+Cell[CellGroupData[{
+Cell[133857, 3270, 496, 12, 41, "Input"],
+Cell[134356, 3284, 8010, 178, 419, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[142415, 3468, 143, 1, 44, "Subsection"],
+Cell[142561, 3471, 1058, 25, 76, "Text"],
+Cell[CellGroupData[{
+Cell[143644, 3500, 496, 12, 41, "Input"],
+Cell[144143, 3514, 8635, 193, 419, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[152815, 3712, 496, 12, 41, "Input"],
+Cell[153314, 3726, 8662, 194, 419, "Output"]
+}, Open  ]]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[162025, 3926, 156, 2, 44, "Subsection"],
+Cell[162184, 3930, 1027, 19, 47, "Text"],
+Cell[CellGroupData[{
+Cell[163236, 3953, 462, 9, 41, "Input"],
+Cell[163701, 3964, 6502, 146, 315, "Output"]
+}, Open  ]]
+}, Open  ]]
+}, Open  ]]
+}
+]
+*)
+

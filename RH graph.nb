@@ -1,0 +1,866 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     38599,        858]
+NotebookOptionsPosition[     38128,        837]
+NotebookOutlinePosition[     38504,        853]
+CellTagsIndexPosition[     38461,        850]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[
+ RowBox[{"data", "=", 
+  RowBox[{"{", "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Labeled", "[", 
+     RowBox[{"1", ",", 
+      RowBox[{"Framed", "[", "\"\<Dirichlet Series\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"2", ",", 
+      RowBox[{"Framed", "[", "\"\<Mellin Transform\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"3", ",", 
+      RowBox[{"Framed", "[", "\"\<Functional Equation\>\"", "]"}]}], "]"}], 
+    ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"4", ",", 
+      RowBox[{"Framed", "[", "\"\<Euler Product\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"5", ",", 
+      RowBox[{"Framed", "[", "\"\<Jacobi \[Psi]\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"6", ",", 
+      RowBox[{"Framed", "[", "\"\<Special values\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"7", ",", 
+      RowBox[{"Framed", "[", "\"\<Complex Zeros\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"8", ",", 
+      RowBox[{"Framed", "[", "\"\<Hadamard Product\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"9", ",", 
+      RowBox[{"Framed", "[", "\"\<RH\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"10", ",", 
+      RowBox[{"Framed", "[", "\"\<N(T)\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"11", ",", 
+      RowBox[{
+      "Framed", "[", "\"\<\!\(\*SubscriptBox[\(N\), \(0\)]\)(T)\>\"", "]"}]}],
+      "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"12", ",", 
+      RowBox[{"Framed", "[", "\"\<Continuation\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"13", ",", 
+      RowBox[{"Framed", "[", "\"\<Stirling\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"14", ",", 
+      RowBox[{"Framed", "[", "\"\<\[Pi](x) vs Li(x)\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"15", ",", 
+      RowBox[{"Framed", "[", "\"\<PNT\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"16", ",", 
+      RowBox[{"Framed", "[", "\"\<Selberg Moments\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"17", ",", 
+      RowBox[{"Framed", "[", "\"\<Nicolas Identity\>\"", "]"}]}], "]"}], ",", 
+    RowBox[{"Labeled", "[", 
+     RowBox[{"18", ",", 
+      RowBox[{"Framed", "[", "\"\<N(\[Sigma],T)\>\"", "]"}]}], "]"}]}], 
+   "\[IndentingNewLine]", "}"}]}]], "Input",
+ CellChangeTimes->{{3.7107818613487587`*^9, 3.710781864949497*^9}, {
+   3.710781918361842*^9, 3.710781963697835*^9}, {3.710782043154745*^9, 
+   3.710782060640908*^9}, {3.710782286004521*^9, 3.7107822940266027`*^9}, {
+   3.7107824005823884`*^9, 3.7107824172673817`*^9}, {3.710782480080742*^9, 
+   3.7107824948715825`*^9}, {3.7107825282502937`*^9, 3.710782567083307*^9}, {
+   3.7107826238704147`*^9, 3.7107826626911697`*^9}, {3.710782757563879*^9, 
+   3.7107827645089207`*^9}, {3.710782871341934*^9, 3.7107829068105373`*^9}, {
+   3.7107834041249495`*^9, 3.7107834091191854`*^9}, {3.7107834606551867`*^9, 
+   3.7107834837923803`*^9}, {3.710783552162859*^9, 3.710783558754204*^9}, 
+   3.710783746130298*^9, {3.710783789813404*^9, 3.710783799328705*^9}, {
+   3.7107838597302437`*^9, 3.7107838700626926`*^9}, {3.7107839075794163`*^9, 
+   3.7107839164048777`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   TemplateBox[{"1",FrameBox["\"Dirichlet Series\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"2",FrameBox["\"Mellin Transform\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{
+    "3",FrameBox["\"Functional Equation\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"4",FrameBox["\"Euler Product\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"5",FrameBox["\"Jacobi \[Psi]\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"6",FrameBox["\"Special values\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"7",FrameBox["\"Complex Zeros\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"8",FrameBox["\"Hadamard Product\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"9",FrameBox["\"RH\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"10",FrameBox["\"N(T)\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{
+    "11",FrameBox[
+     "\"\\!\\(\\*SubscriptBox[\\(N\\), \\(0\\)]\\)(T)\"", StripOnInput -> 
+      False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"12",FrameBox["\"Continuation\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"13",FrameBox["\"Stirling\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"14",FrameBox["\"\[Pi](x) vs Li(x)\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"15",FrameBox["\"PNT\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"16",FrameBox["\"Selberg Moments\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, BaselinePosition -> 
+      {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"17",FrameBox["\"Nicolas Identity\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )], ",", 
+   TemplateBox[{"18",FrameBox["\"N(\[Sigma],T)\"", StripOnInput -> False]},
+    "Labeled",
+    DisplayFunction->(GridBox[{{
+        TagBox[
+         ItemBox[
+          PaneBox[
+           TagBox[#, "SkipImageSizeLevel"], Alignment -> {Center, Baseline}, 
+           BaselinePosition -> Baseline], DefaultBaseStyle -> "Labeled"], 
+         "SkipImageSizeLevel"]}, {
+        ItemBox[#2, DefaultBaseStyle -> "LabeledLabel"]}}, 
+      GridBoxAlignment -> {"Columns" -> {{Center}}, "Rows" -> {{Center}}}, 
+      AutoDelete -> False, 
+      GridBoxItemSize -> {
+       "Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}, 
+      BaselinePosition -> {1, 1}]& ),
+    InterpretationFunction->(RowBox[{"Labeled", "[", 
+       RowBox[{#, ",", #2}], "]"}]& )]}], "}"}]], "Output",
+ CellChangeTimes->{
+  3.710781865230896*^9, {3.710781927575434*^9, 3.710781963959632*^9}, 
+   3.710782061071982*^9, 3.7107822943657074`*^9, {3.7107824078104343`*^9, 
+   3.71078241765799*^9}, 3.7107824960016785`*^9, {3.7107825285797935`*^9, 
+   3.7107825692435865`*^9}, 3.710782631226016*^9, 3.710782664076251*^9, 
+   3.710782766492013*^9, 3.7107828842813997`*^9, 3.710782915059922*^9, 
+   3.7107834095783615`*^9, {3.7107835427578535`*^9, 3.7107835591976*^9}, 
+   3.710783799755796*^9, 3.7107838705420656`*^9, 3.7107839170638156`*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Graph", "[", 
+  RowBox[{"data", ",", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"1", "\[Rule]", "2"}], ",", "\"\<inheres\>\""}], "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"2", "\[Rule]", " ", "3"}], ",", "\"\<inheres\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"4", "\[Rule]", " ", "1"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"3", "\[Rule]", " ", "5"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"3", "\[Rule]", " ", "6"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"3", "\[Rule]", " ", "7"}], ",", "\"\<inheres\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"7", "\[Rule]", " ", "8"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"7", "\[Rule]", " ", "9"}], ",", "\"\<inheres\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"10", "\[Rule]", " ", "3"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"11", "\[Rule]", " ", "10"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"3", "\[Rule]", " ", "12"}], ",", "\"\<inheres\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"10", "\[Rule]", " ", "9"}], ",", "\"\<accident\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"9", "\[Rule]", " ", "10"}], ",", "\"\<accident\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"11", "\[Rule]", " ", "13"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"14", "\[Rule]", " ", "15"}], ",", "\"\<accident\>\""}], "]"}],
+      ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"15", "\[Rule]", " ", "14"}], ",", "\"\<accident\>\""}], "]"}],
+      ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"15", "\[Rule]", " ", "9"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"15", "\[Rule]", " ", "4"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"15", "\[Rule]", " ", "12"}], ",", "\"\<participates\>\""}], 
+      "]"}], ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"9", "\[Rule]", " ", "16"}], ",", "\"\<accident\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"16", "\[Rule]", " ", "9"}], ",", "\"\<accident\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"17", "\[Rule]", " ", "9"}], ",", "\"\<accident\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"9", "\[Rule]", " ", "17"}], ",", "\"\<accident\>\""}], "]"}], 
+     ",", 
+     RowBox[{"Labeled", "[", 
+      RowBox[{
+       RowBox[{"18", "\[Rule]", " ", "10"}], ",", "\"\<participates\>\""}], 
+      "]"}]}], "}"}], ",", 
+   RowBox[{"GraphLayout", "\[Rule]", "\"\<SpiralEmbedding\>\""}]}], 
+  "]"}]], "Input",
+ CellChangeTimes->CompressedData["
+1:eJwdzj1IAgEAhuGjzOAKh3MIqQZxueKCSxyCkCyEokFCqCmhn5MIDlSIUDAH
+IY0gL2upwEo5yymwQghT9CposCEKDKQIAod+wQhEC/JzeHnWVz1jM1sbCIJQ
+1YKeUjOTjb4NGv2iHnpNuiG462ZH4GKmcQy+cpsWKP9+moYGITgHtzxhHg4b
+ODvsccZd8MRuWYJpmdkHTWWlHxa7omtQbCoKcOVW2IbV5N8OvGSL+/BIqQ9D
+kvEewo5ALgbfqzdnsPIYSsFJ7YsE5ze+LmD8J38N1aI1BxUD4/fwnG7J1/8d
+UgEmKFsJRj4cZTjB91dg5nmBkGqe/s7K4J3P1Qr5WEABOd0VBWmNvA1STrId
+MkFVJwxle2m4OrrcDR/4AgvXk1EtTKQ/++AxpTFCY4rcg5Gpg7r/cajkgw==
+
+  "]],
+
+Cell[BoxData[
+ GraphicsBox[
+  NamespaceBox["NetworkGraphics",
+   DynamicModuleBox[{Typeset`graph = HoldComplete[
+     Graph[{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 
+      18}, {{{1, 2}, {2, 3}, {4, 1}, {3, 5}, {3, 6}, {3, 7}, {7, 8}, {7, 9}, {
+       10, 3}, {11, 10}, {3, 12}, {10, 9}, {9, 10}, {11, 13}, {14, 15}, {15, 
+       14}, {15, 9}, {15, 4}, {15, 12}, {9, 16}, {16, 9}, {17, 9}, {9, 17}, {
+       18, 10}}, Null}, {
+      EdgeLabels -> {
+        DirectedEdge[3, 5] -> "participates", DirectedEdge[7, 9] -> "inheres",
+          DirectedEdge[17, 9] -> "accident", DirectedEdge[2, 3] -> "inheres", 
+         DirectedEdge[7, 8] -> "participates", DirectedEdge[18, 10] -> 
+         "participates", DirectedEdge[10, 3] -> "participates", 
+         DirectedEdge[9, 10] -> "accident", DirectedEdge[1, 2] -> "inheres", 
+         DirectedEdge[16, 9] -> "accident", DirectedEdge[3, 7] -> "inheres", 
+         DirectedEdge[14, 15] -> "accident", DirectedEdge[15, 4] -> 
+         "participates", DirectedEdge[9, 17] -> "accident", 
+         DirectedEdge[3, 6] -> "participates", DirectedEdge[15, 12] -> 
+         "participates", DirectedEdge[10, 9] -> "accident", 
+         DirectedEdge[15, 9] -> "participates", DirectedEdge[11, 13] -> 
+         "participates", DirectedEdge[9, 16] -> "accident", 
+         DirectedEdge[15, 14] -> "accident", DirectedEdge[3, 12] -> "inheres",
+          DirectedEdge[11, 10] -> "participates", DirectedEdge[4, 1] -> 
+         "participates"}, GraphLayout -> "SpiralEmbedding", 
+       VertexLabels -> {
+        9 -> Framed["RH"], 17 -> Framed["Nicolas Identity"], 14 -> 
+         Framed["\[Pi](x) vs Li(x)"], 5 -> Framed["Jacobi \[Psi]"], 6 -> 
+         Framed["Special values"], 13 -> Framed["Stirling"], 16 -> 
+         Framed["Selberg Moments"], 4 -> Framed["Euler Product"], 15 -> 
+         Framed["PNT"], 12 -> Framed["Continuation"], 1 -> 
+         Framed["Dirichlet Series"], 7 -> Framed["Complex Zeros"], 8 -> 
+         Framed["Hadamard Product"], 18 -> Framed["N(\[Sigma],T)"], 2 -> 
+         Framed["Mellin Transform"], 10 -> Framed["N(T)"], 3 -> 
+         Framed["Functional Equation"], 11 -> 
+         Framed["\!\(\*SubscriptBox[\(N\), \(0\)]\)(T)"]}}]]}, 
+    TagBox[GraphicsGroupBox[{
+       {Hue[0.6, 0.7, 0.5], Opacity[0.7], Arrowheads[
+        Medium], {
+         ArrowBox[{{0., 1.4770081065840146`}, {0.04249072156479705, 
+          1.342734642349104}}, 0.02486429730669351], 
+         InsetBox["\<\"inheres\"\>", {0.021245360782398526, 1.4098713744665594},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.04249072156479705, 1.342734642349104}, {
+          0.17773039635153554`, 0.5370938569396416}}, 0.02486429730669351], 
+         InsetBox["\<\"inheres\"\>", {0.1101105589581663, 0.9399142496443729},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.17773039635153554`, 0.5370938569396416}, {
+          1.0176912865741194`, 0.}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {0.5977108414628275, 0.2685469284698208},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.17773039635153554`, 0.5370938569396416}, {
+          1.5403553081130092`, 0.1342734642349106}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {0.8590428522322724, 0.3356836605872761},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.17773039635153554`, 0.5370938569396416}, {
+          0.8941965898676351, 0.6713673211745521}}, 0.02486429730669351], 
+         InsetBox["\<\"inheres\"\>", {0.5359634931095854, 0.6042305890570969},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.17773039635153554`, 0.5370938569396416}, {
+          0.24565152312734606`, 0.40282039270473136`}}, 0.02486429730669351], 
+         InsetBox["\<\"inheres\"\>", {0.2116909597394408, 0.4699571248221865},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.7388998396788835, 1.611281570818925}, {0., 
+          1.4770081065840146`}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {0.36944991983944175, 1.5441448387014698},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.8941965898676351, 0.6713673211745521}, {
+          1.0336168789525664`, 0.268546928469821}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {0.9639067344101007, 0.46995712482218654},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.8941965898676351, 0.6713673211745521}, {
+          1.7761088131198366`, 0.8056407854094625}}, 0.02486429730669351], 
+         InsetBox["\<\"inheres\"\>", {1.3351527014937359, 0.7385040532920073},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{1.7761088131198366`, 0.8056407854094625}, {
+          1.9355140974981668`, 0.9324646785283279}, {2.139079439447809, 
+          0.9399142496443728}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {1.948194983787379, 0.8981854613698756},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{1.7761088131198366`, 0.8056407854094625}, {
+          1.7023569199979125`, 0.9301820425524178}, {1.7169251420186082`, 
+          1.0741877138792832`}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {1.7277186925763353, 0.935771392667287},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{1.7761088131198366`, 0.8056407854094625}, {
+          1.2234949419535446`, 0.8470916445936747}, {0.8033612435011758, 
+          1.2084611781141936`}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {1.2615376008211747, 0.9389586518885218},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{2.139079439447809, 0.9399142496443728}, {
+          0.17773039635153554`, 0.5370938569396416}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {1.1584049178996723, 0.7385040532920072},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{2.139079439447809, 0.9399142496443728}, {
+          1.979674155069474, 0.8130903565274077}, {1.7761088131198366`, 
+          0.8056407854094625}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {1.9669932687802665, 0.8473695736839597},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{1.856137931610055, 1.8798284992887455`}, {
+          2.139079439447809, 0.9399142496443728}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {1.997608685528932, 1.4098713744665592},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{1.856137931610055, 1.8798284992887455`}, {
+          1.6625462752505982`, 1.7455550350538351`}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {1.7593421034303267, 1.8126917671712903},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{1.0052200252823873`, 
+          2.0141019635236557`}, {0.7291296808537956, 1.997699403438812}, {
+          0.49719939399650614`, 2.148375427758566}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {0.7418105671430031, 2.0456772514510995},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.49719939399650614`, 2.148375427758566}, {
+          0.7388998396788835, 1.611281570818925}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {0.6180496168376948, 1.8798284992887455},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.49719939399650614`, 2.148375427758566}, {
+          1.7761088131198366`, 0.8056407854094625}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {1.1366541035581714, 1.4770081065840142},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{0.49719939399650614`, 2.148375427758566}, {
+          0.24565152312734606`, 0.40282039270473136`}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {0.3714254585619261, 1.2755979102316486},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{0.49719939399650614`, 2.148375427758566}, {
+          0.773289738425097, 2.1647779878394826`}, {1.0052200252823873`, 
+          2.0141019635236557`}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {0.7606088521358907, 2.116800139831123},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{1.7169251420186082`, 
+          1.0741877138792832`}, {1.7906770351405334`, 0.9496464567456578}, {
+          1.7761088131198366`, 0.8056407854094625}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {1.7653152625621102, 0.9440571066214589},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[BezierCurveBox[{{0.8033612435011758, 1.2084611781141936`}, {
+          1.3559751146674648`, 1.1670103189304188`}, {1.7761088131198366`, 
+          0.8056407854094625}}], 0.02486429730669351], 
+         InsetBox["\<\"accident\"\>", {1.3179324557998375, 1.0751433116351345},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}, {
+         ArrowBox[{{1.0176912865741194`, 2.282648891993477}, {
+          2.139079439447809, 0.9399142496443728}}, 0.02486429730669351], 
+         InsetBox["\<\"participates\"\>", {1.5783853630109643, 1.6112815708189248},
+           ImageScaled[{0.5, 0.5}],
+          BaseStyle->"Graphics"]}}, 
+       {Hue[0.6, 0.2, 0.8], EdgeForm[{GrayLevel[0], Opacity[
+        0.7]}], {DiskBox[{0., 1.4770081065840146}, 0.02486429730669351], 
+         InsetBox[
+          FrameBox["\<\"Dirichlet Series\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.02486429730669351, 1.501872403890708}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.04249072156479705, 1.342734642349104}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Mellin Transform\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.06735501887149056, 1.3675989396557975}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.17773039635153554, 0.5370938569396416}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Functional Equation\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.20259469365822905, 0.5619581542463351}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.7388998396788835, 1.611281570818925}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Euler Product\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.763764136985577, 1.6361458681256185}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.0176912865741194, 0.}, 0.02486429730669351], InsetBox[
+          FrameBox["\<\"Jacobi \[Psi]\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.042555583880813, 0.02486429730669351}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.5403553081130092, 0.1342734642349106}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Special values\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.5652196054197027, 0.1591377615416041}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.8941965898676351, 0.6713673211745521}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Complex Zeros\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.9190608871743285, 0.6962316184812456}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.0336168789525664, 0.268546928469821}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Hadamard Product\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.0584811762592599, 0.29341122577651446}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.7761088131198366, 0.8056407854094625}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"RH\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.80097311042653, 0.830505082716156}], ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{2.139079439447809, 0.9399142496443728}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"N(T)\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {2.1639437367545025, 0.9647785469510662}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.856137931610055, 1.8798284992887455}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"\\!\\(\\*SubscriptBox[\\(N\\), \\(0\\)]\\)(T)\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.8810022289167485, 1.904692796595439}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.24565152312734606, 0.40282039270473136}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Continuation\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.27051582043403954, 0.42768469001142484}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.6625462752505982, 1.7455550350538351}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Stirling\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.6874105725572917, 1.7704193323605286}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.0052200252823873, 2.0141019635236557}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"\[Pi](x) vs Li(x)\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.0300843225890808, 2.038966260830349}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.49719939399650614, 2.148375427758566}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"PNT\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.5220636913031996, 2.1732397250652595}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.7169251420186082, 1.0741877138792832}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Selberg Moments\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.7417894393253017, 1.0990520111859767}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{0.8033612435011758, 1.2084611781141936}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"Nicolas Identity\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {0.8282255408078693, 1.233325475420887}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}, {
+         DiskBox[{1.0176912865741194, 2.282648891993477}, 
+          0.02486429730669351], InsetBox[
+          FrameBox["\<\"N(\[Sigma],T)\"\>",
+           StripOnInput->False], 
+          Offset[{2, 2}, {1.042555583880813, 2.3075131893001704}], 
+          ImageScaled[{0, 0}],
+          BaseStyle->"Graphics"]}}}],
+     MouseAppearanceTag["NetworkGraphics"]],
+    AllowKernelInitialization->False]],
+  DefaultBaseStyle->{
+   "NetworkGraphics", FrontEnd`GraphicsHighlightColor -> Hue[0.8, 1., 0.6]},
+  FormatType->TraditionalForm,
+  FrameTicks->None]], "Output",
+ CellChangeTimes->{
+  3.7107840333868027`*^9, {3.7107847623082576`*^9, 3.710784765715232*^9}}]
+}, Open  ]]
+},
+WindowSize->{1408, 848},
+WindowMargins->{{0, Automatic}, {Automatic, 3}},
+Magnification:>1.5 Inherited,
+FrontEndVersion->"11.0 for Microsoft Windows (64-bit) (September 21, 2016)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[580, 22, 3349, 73, 278, "Input"],
+Cell[3932, 97, 14230, 320, 278, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[18199, 422, 3936, 111, 278, "Input"],
+Cell[22138, 535, 15974, 299, 580, "Output"]
+}, Open  ]]
+}
+]
+*)
+
